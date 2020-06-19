@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NWT2.Models
 {
-    public class Pica
+    public class Pica : Resource
     {
 
         public Guid PicaID { get; set; }

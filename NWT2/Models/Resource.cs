@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace NWT2.Models
 {
-    public class TipVozila : Resource
+    public abstract class Resource:Link
     {
-        public Guid TipVozilaID { get; set; }
-
-        public string vrstaVozila { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public Link Self { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NWT2.Models
 {
-    public class Adresa
+    public class Adresa:Resource
     {
 
         public Guid AdresaID { get; set; }

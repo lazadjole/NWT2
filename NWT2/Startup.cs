@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,7 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NWT2.Filters;
+using NWT2.Infrastructure;
 using NWT2.Models;
+using NWT2.Services;
 
 namespace NWT2
 {
@@ -29,20 +32,33 @@ namespace NWT2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
             services.AddRouting(opt => opt.LowercaseUrls = true);
             services.AddMvc(opt =>
             {
                 opt.SslPort = _httpsPort;
                 opt.Filters.Add(typeof(JsonExceptionFilters));
                 opt.Filters.Add(typeof(RequireHttpsAttribute));
+                opt.Filters.Add(typeof(LinkRewritingFilter));
             }
          );
 
             services.AddDbContext<PicerijaDbContext>(opt => opt.UseSqlServer("Server=DESKTOP-R5NN8B8\\SQLEXPRESS;Database=Picerija;Integrated Security=true"));
+            services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddControllers()
                  .AddJsonOptions(options => options.JsonSerializerOptions.IgnoreNullValues = true);
+            services.AddScoped<IAdresaService, AdresaService>();
+            services.AddScoped<IDetaljiNarudzbeniceService, DetaljiNarudzbeniceService>();
+            services.AddScoped<IEkstraDodaciService, EkstraDodaciService>();
+            services.AddScoped<IDodatakService, DodatakService>();
+            services.AddScoped<IkupacService, KupacService>();
+            services.AddScoped<INacinPlacanjaService, NacinPlacanjaService>();
+            services.AddScoped<INarudzbenicaService, NarudzbenicaService>();
+            services.AddScoped<IPicaService, PicaService>();
+            services.AddScoped<IStatusDostaveService, StatusDostaveService>();
+            services.AddScoped<ITipVozilaService, TipVozilaService>();
+            services.AddScoped<IVoziloService, VoziloService>();
+            services.AddScoped<IZaposleniService, ZaposleniService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NWT2.Models;
 
 namespace NWT2.Models
 {
@@ -16,6 +17,9 @@ namespace NWT2.Models
 
         public DbSet<Entities.Adresa> Adrese { get; set; }
         public DbSet<Entities.Kupac> Kupci { get; set; }
+        public DbSet<Entities.Dodatak> Dodaci { get; set; }
+
+        public DbSet<Entities.EkstraDodaci> EkstraDodaci{ get; set; }
 
         public DbSet<Entities.Zaposleni> Zaposleni { get; set; }
 
@@ -29,10 +33,11 @@ namespace NWT2.Models
 
         public DbSet<Entities.StatusDostave> StatusDostave { get; set; }
 
-        public DbSet<DetaljiNarudzbenice> DetaljiNarudzbenice { get; set; }
+        public DbSet<Entities.DetaljiNarudzbenice> DetaljiNarudzbenice { get; set; }
 
-        public DbSet<Pica> Pice { get; set; }
+        public DbSet<Entities.Pica> Pice { get; set; }
 
+       
 
     }
 }

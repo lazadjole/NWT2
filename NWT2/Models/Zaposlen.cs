@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NWT2.Models
 {
-    public class Zaposlen : Resource
+    public class Zaposlen :Resource
     {
         public Guid ZaposleniId { get; set; }
 

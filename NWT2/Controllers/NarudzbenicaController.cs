@@ -53,69 +53,28 @@ namespace NWT2.Controllers
             return Ok(narudzbenica);
         }
 
-        //// PUT: api/Narudzbenica/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutNarudzbenica(Guid id, Narudzbenica narudzbenica)
-        //{
-        //    if (id != narudzbenica.NarudzbenicaID)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    _context.Entry(narudzbenica).State = EntityState.Modified;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!NarudzbenicaExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
 
-        //    return NoContent();
-        //}
+        [HttpPost]
+        public async Task<ActionResult<Narudzbenica>> PostNarudzbenicaAsync(CancellationToken ct, [FromBody] Entities.Narudzbenica narudzbenicaBody)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-        //// POST: api/Narudzbenica
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPost]
-        //public async Task<ActionResult<Narudzbenica>> PostNarudzbenica(Narudzbenica narudzbenica)
-        //{
-        //    _context.Narudzbenica_1.Add(narudzbenica);
-        //    await _context.SaveChangesAsync();
+            var resourceID = await _narudzbenicaService.CreateNarudzbenicaAsync(ct, narudzbenicaBody.BrojNarudzbenice,narudzbenicaBody.FKKupacID,narudzbenicaBody.FKZaposleniId,narudzbenicaBody.FKNacinPlacanjaID,narudzbenicaBody.FKNacinPlacanjaID,narudzbenicaBody.datumPrijema,narudzbenicaBody.FKVoziloID);
 
-        //    return CreatedAtAction("GetNarudzbenica", new { id = narudzbenica.NarudzbenicaID }, narudzbenica);
-        //}
+            return Created(Url.Link(nameof(Controllers.NarudzbenicaController.GetNarudzbenicaByIdAsync), new { id = resourceID }), null);
+        }
 
-        //// DELETE: api/Narudzbenica/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Narudzbenica>> DeleteNarudzbenica(Guid id)
-        //{
-        //    var narudzbenica = await _context.Narudzbenica_1.FindAsync(id);
-        //    if (narudzbenica == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    _context.Narudzbenica_1.Remove(narudzbenica);
-        //    await _context.SaveChangesAsync();
 
-        //    return narudzbenica;
-        //}
+        [HttpDelete("{id}",Name =(nameof(DeleteNarudzbenicaAsync)))]
+        public async Task<ActionResult<Narudzbenica>> DeleteNarudzbenicaAsync(CancellationToken ct,Guid id)
+        {
+            await _narudzbenicaService.DeleteNarudzbenicaAsync(ct, id);
+            return NoContent(); ;
+        }
 
-        //private bool NarudzbenicaExists(Guid id)
-        //{
-        //    return _context.Narudzbenica_1.Any(e => e.NarudzbenicaID == id);
-        //}
+
     }
 }

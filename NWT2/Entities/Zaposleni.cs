@@ -27,7 +27,7 @@ namespace NWT2.Entities
 
         [NotMapped]
         [Column("ID_adresa")]
-        public int FKAdresaID { get; set; }
+        public Guid FKAdresaID { get; set; }
 
         [MaxLength(15)]
         public string BrojTelefona { get; set; }

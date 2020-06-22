@@ -19,6 +19,34 @@ namespace NWT2.Services
             _mapper = mapper;
         }
 
+        public async Task<Guid> CreateEkstraDodaciAsync(CancellationToken ct, Guid IdDodatak, Guid IdDetaljiNardzbenice)
+        {
+            Guid ID = Guid.NewGuid();
+            var newEkstraDodatak = _dbContext.EkstraDodaci.Add(
+                new Entities.EkstraDodaci
+                {
+                    Ekstra_dodaciID = ID,
+                    FKDetaljiNarudzbeniceID=IdDetaljiNardzbenice,
+                    FKDodatakID=IdDodatak
+                }
+                );
+
+            var created = await _dbContext.SaveChangesAsync(ct);
+
+            if (created < 1) throw new InvalidOperationException("Can't created new ekstraDodatak");
+
+            return ID;
+        }
+
+        public async Task DeleteEkstraDodatakAsync(CancellationToken ct, Guid id)
+        {
+            var ekstraDodaci = await _dbContext.EkstraDodaci.FirstOrDefaultAsync(x => x.Ekstra_dodaciID == id);
+            if (ekstraDodaci == null) return;
+
+            _dbContext.EkstraDodaci.Remove(ekstraDodaci);
+            await _dbContext.SaveChangesAsync(ct);
+        }
+
         public async Task<IEnumerable<EkstraDodaci>> GetEkstraDodaciAsync(CancellationToken ct)
         {
             var ekstraDodaci = await _dbContext.EkstraDodaci.ToArrayAsync();

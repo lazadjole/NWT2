@@ -8,8 +8,11 @@ namespace NWT2.Services
 {
     public interface IAdresaService
     {
-        Task<Models.Adresa> GetAdresaByIdAsync(Guid id, CancellationToken ct);
-        Task<IEnumerable<Models.Adresa>> GetAdreseAsync(CancellationToken ct);
-    
+       public Task<Models.Adresa> GetAdresaByIdAsync(Guid id, CancellationToken ct);
+       public Task<IEnumerable<Models.Adresa>> GetAdreseAsync(CancellationToken ct);
+
+        public Task<Guid> CreateAdresaAsync(CancellationToken ct, string ulica, int broj, string grad);
+
+        public Task DeleteAdresaAsync(CancellationToken ct, Guid id);
     }
 }

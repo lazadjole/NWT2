@@ -19,6 +19,19 @@ namespace NWT2.Services
             _mapper = mapper;
         }
 
+        public async Task DeleteDetaljiNarudzbeniceAsync(CancellationToken ct, Guid id)
+        {
+            var detaljNarudzbenice = await _dbContext.DetaljiNarudzbenice.FirstOrDefaultAsync(x => x.DetaljiNarudzbeniceID ==id);
+
+            if (detaljNarudzbenice == null) return;
+
+             _dbContext.DetaljiNarudzbenice.Remove(detaljNarudzbenice);
+
+            await _dbContext.SaveChangesAsync(ct);
+
+
+        }
+
         public async Task<IEnumerable<DetaljiNarudzbenice>> GetDetaljiNarudzbeniceAsync(CancellationToken ct)
         {
             var detaljiNarudzbenica = await _dbContext.DetaljiNarudzbenice.ToArrayAsync();
@@ -34,6 +47,25 @@ namespace NWT2.Services
 
             return _mapper.Map<Entities.DetaljiNarudzbenice, Models.DetaljiNarudzbenice>(detaljiNarudzbenice);
 
+        }
+
+        public async  Task<Guid> PostDetaljiNarudzbeniceAsync(CancellationToken ct, Guid picaId, Guid narudzbenicaId, int kolicina)
+        {
+            Guid ID = Guid.NewGuid();
+
+            var newdetaljNarudzbenice =  _dbContext.DetaljiNarudzbenice.Add
+                (
+                    new Entities.DetaljiNarudzbenice
+                    {
+                        DetaljiNarudzbeniceID = ID,
+                        FKNarudzbenicaID = narudzbenicaId,
+                        FKPicaID = picaId,
+                        Kolicina = kolicina
+                    }
+                );
+            var created= await _dbContext.SaveChangesAsync(ct);
+            if (created < 1) throw new InvalidOperationException("can't create new detaljiNarudzbenice");
+            return ID;
         }
     }
 }

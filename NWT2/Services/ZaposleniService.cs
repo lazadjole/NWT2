@@ -18,6 +18,40 @@ namespace NWT2.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
+
+        public async Task<Guid> CreateZaposleniAsync(CancellationToken ct, string ime, string prezime, Guid idAdresa, string brTelefona)
+        {
+            Guid ID = Guid.NewGuid();
+            var newAdresa = _dbContext.Zaposleni.Add(
+                new Entities.Zaposleni
+                {
+                    ZaposleniId=ID,
+                    Ime=ime,
+                    Prezime=prezime,
+                    BrojTelefona=brTelefona,
+                    FKAdresaID=idAdresa
+
+                }
+                );
+
+            var created = await _dbContext.SaveChangesAsync(ct);
+
+            if (created < 1) throw new InvalidOperationException("Can't created new resource");
+
+            return ID;
+        }
+
+     
+
+        public async Task DeleteZaposleniAsync(CancellationToken ct, Guid id)
+        {
+            var zaposleni = await _dbContext.Zaposleni.FirstOrDefaultAsync(x => x.ZaposleniId == id);
+            if (zaposleni == null) return;
+
+            _dbContext.Zaposleni.Remove(zaposleni);
+            await _dbContext.SaveChangesAsync(ct);
+        }
+
         public async Task<Zaposlen> GetZaposlenByIdAsync(Guid id, CancellationToken ct)
         {
             var zaposlen = await _dbContext.Zaposleni.FirstOrDefaultAsync(x => x.ZaposleniId == id);

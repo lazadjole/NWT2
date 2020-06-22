@@ -52,23 +52,24 @@ namespace NWT2.Controllers
 
             return Ok(vozilo);
         }
-
-        // POST api/<VoziloController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost(Name = nameof(PostVoziloaAsync))]
+        public async Task<ActionResult<Vozilo>> PostVoziloaAsync(CancellationToken ct, [FromBody] Entities.Vozilo voziloBody)
         {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+
+            var resourceID = await _voziloService.CreateVoziloAsync(ct, voziloBody.FKTipVozilaID,voziloBody.EvidencioniBr,voziloBody.MarkaVozila,voziloBody.DetaljiVozila);
+
+            return Created(Url.Link(nameof(Controllers.VoziloController.GetVoziloByIdAsync), new { id = resourceID }), null);
+
         }
 
-        // PUT api/<VoziloController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
-        // DELETE api/<VoziloController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+        [HttpDelete("{id}", Name = (nameof(DeleteVoziloAsync)))]
+        public async Task<IActionResult> DeleteVoziloAsync(CancellationToken ct, Guid id)
         {
+            await _voziloService.DeleteVoziloAsync(ct, id);
+            return NoContent();
         }
     }
 }

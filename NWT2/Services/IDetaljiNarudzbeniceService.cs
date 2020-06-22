@@ -11,5 +11,9 @@ namespace NWT2.Services
         public Task<Models.DetaljiNarudzbenice> GetDetaljiNarudzbeniceByIdAsync(Guid id, CancellationToken ct);
 
         public Task<IEnumerable<Models.DetaljiNarudzbenice>> GetDetaljiNarudzbeniceAsync(CancellationToken ct);
+
+        public Task<Guid> PostDetaljiNarudzbeniceAsync(CancellationToken ct, Guid picaId, Guid narudzbenicaId, int kolicina);
+
+        public Task DeleteDetaljiNarudzbeniceAsync(CancellationToken ct, Guid id);
     }
 }

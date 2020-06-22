@@ -18,13 +18,13 @@ namespace NWT2.Entities
 
         [NotMapped]
         [Column("ID_Dodatka")]
-        public int FKDodatakID { get; set; }
+        public Guid FKDodatakID { get; set; }
 
         [Required]
         public DetaljiNarudzbenice DetaljiNarudzbenice { get; set; }
 
         [NotMapped]
         [Column("ID_DetaljiNarudzbenice")]
-        public int FKDetaljiNarudzbeniceID { get; set; }
+        public Guid FKDetaljiNarudzbeniceID { get; set; }
     }
 }

@@ -53,69 +53,27 @@ namespace NWT2.Controllers
             return Ok(nacinPlacanja);
         }
 
-        //// PUT: api/NacinPlacanja/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutNacinPlacanja(Guid id, NacinPlacanja nacinPlacanja)
-        //{
-        //    if (id != nacinPlacanja.NacinPlacanjaID)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    _context.Entry(nacinPlacanja).State = EntityState.Modified;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!NacinPlacanjaExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
 
-        //    return NoContent();
-        //}
+        [HttpPost (Name =nameof(PostNacinPlacanjaAsync))]
+        public async Task<ActionResult<NacinPlacanja>> PostNacinPlacanjaAsync(CancellationToken ct, [FromBody] Entities.NacinPlacanja nacinPlacanjaBody)
+        {
 
-        //// POST: api/NacinPlacanja
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPost]
-        //public async Task<ActionResult<NacinPlacanja>> PostNacinPlacanja(NacinPlacanja nacinPlacanja)
-        //{
-        //    _context.NacinPlacanja_1.Add(nacinPlacanja);
-        //    await _context.SaveChangesAsync();
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-        //    return CreatedAtAction("GetNacinPlacanja", new { id = nacinPlacanja.NacinPlacanjaID }, nacinPlacanja);
-        //}
+            var resourceID = await _nacinPlacanjaService.CreateNacinPlacanjaAsync(ct, nacinPlacanjaBody.NazivNacinaPlacanja);
 
-        //// DELETE: api/NacinPlacanja/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<NacinPlacanja>> DeleteNacinPlacanja(Guid id)
-        //{
-        //    var nacinPlacanja = await _context.NacinPlacanja_1.FindAsync(id);
-        //    if (nacinPlacanja == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return Created(Url.Link(nameof(Controllers.NacinPlacanjaController.GetNacinPlacanjaByIdAsync), new { id = resourceID }), null);
+        }
 
-        //    _context.NacinPlacanja_1.Remove(nacinPlacanja);
-        //    await _context.SaveChangesAsync();
+        [HttpDelete("{id}",Name =(nameof(DeleteNacinPlacanjaAsync)))]
+        public async Task<ActionResult<NacinPlacanja>> DeleteNacinPlacanjaAsync(Guid id,CancellationToken ct)
+        {
+            await _nacinPlacanjaService.DeleteNacinPlacanjaAsync(ct, id);
+            return NoContent();
+        }
 
-        //    return nacinPlacanja;
-        //}
-
-        //private bool NacinPlacanjaExists(Guid id)
-        //{
-        //    return _context.NacinPlacanja_1.Any(e => e.NacinPlacanjaID == id);
-        //}
+      
     }
 }

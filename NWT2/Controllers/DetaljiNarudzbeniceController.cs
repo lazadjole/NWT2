@@ -49,69 +49,27 @@ namespace NWT2.Controllers
             return Ok(resource);
         }
 
-    //    // PUT: api/DetaljiNarudzbenice/5
-    //    // To protect from overposting attacks, enable the specific properties you want to bind to, for
-    //    // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-    //    [HttpPut("{id}")]
-    //    public async Task<IActionResult> PutDetaljiNarudzbenice(Guid id, DetaljiNarudzbenice detaljiNarudzbenice)
-    //    {
-    //        if (id != detaljiNarudzbenice.DetaljiNarudzbeniceID)
-    //        {
-    //            return BadRequest();
-    //        }
 
-    //        _context.Entry(detaljiNarudzbenice).State = EntityState.Modified;
+        [HttpPost(Name = nameof(PostDetaljiNarudzbeniceAsync))]
+        public async Task<ActionResult<DetaljiNarudzbenice>> PostDetaljiNarudzbeniceAsync(CancellationToken ct, [FromBody] Entities.DetaljiNarudzbenice detaljiNarudzbenice)
+        {
 
-    //        try
-    //        {
-    //            await _context.SaveChangesAsync();
-    //        }
-    //        catch (DbUpdateConcurrencyException)
-    //        {
-    //            if (!DetaljiNarudzbeniceExists(id))
-    //            {
-    //                return NotFound();
-    //            }
-    //            else
-    //            {
-    //                throw;
-    //            }
-    //        }
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-    //        return NoContent();
-    //    }
+            var resourceID = await _detaljiNarudzbeniceService.PostDetaljiNarudzbeniceAsync(ct, detaljiNarudzbenice.FKPicaID, detaljiNarudzbenice.FKNarudzbenicaID, detaljiNarudzbenice.Kolicina);
 
-    //    // POST: api/DetaljiNarudzbenice
-    //    // To protect from overposting attacks, enable the specific properties you want to bind to, for
-    //    // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-    //    [HttpPost]
-    //    public async Task<ActionResult<DetaljiNarudzbenice>> PostDetaljiNarudzbenice(DetaljiNarudzbenice detaljiNarudzbenice)
-    //    {
-    //        _context.DetaljiNarudzbenice_1.Add(detaljiNarudzbenice);
-    //        await _context.SaveChangesAsync();
+            return Created(Url.Link(nameof(Controllers.DetaljiNarudzbeniceController.GetDetaljiNarudzbeniceByIDasync), new { id = resourceID }), null);
+        }
 
-    //        return CreatedAtAction("GetDetaljiNarudzbenice", new { id = detaljiNarudzbenice.DetaljiNarudzbeniceID }, detaljiNarudzbenice);
-    //    }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<DetaljiNarudzbenice>> DeleteDetaljiNarudzbeniceAsync(Guid id,CancellationToken ct)
+        {
 
-    //    // DELETE: api/DetaljiNarudzbenice/5
-    //    [HttpDelete("{id}")]
-    //    public async Task<ActionResult<DetaljiNarudzbenice>> DeleteDetaljiNarudzbenice(Guid id)
-    //    {
-    //        var detaljiNarudzbenice = await _context.DetaljiNarudzbenice_1.FindAsync(id);
-    //        if (detaljiNarudzbenice == null)
-    //        {
-    //            return NotFound();
-    //        }
+            await _detaljiNarudzbeniceService.DeleteDetaljiNarudzbeniceAsync(ct, id);
 
-    //        _context.DetaljiNarudzbenice_1.Remove(detaljiNarudzbenice);
-    //        await _context.SaveChangesAsync();
+            return NoContent();
+        }
 
-    //        return detaljiNarudzbenice;
-    //    }
 
-    //    private bool DetaljiNarudzbeniceExists(Guid id)
-    //    {
-    //        return _context.DetaljiNarudzbenice_1.Any(e => e.DetaljiNarudzbeniceID == id);
-    //    }
     }
 }

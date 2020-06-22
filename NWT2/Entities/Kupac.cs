@@ -30,7 +30,7 @@ namespace NWT2.Entities
         public Adresa Adresa { get; set; }
 
         [NotMapped]
-        public int FKAdresaID { get; set; }
+        public Guid FKAdresaID { get; set; }
 
         public List<Narudzbenica> Narudzbenice { get; set; }
     }

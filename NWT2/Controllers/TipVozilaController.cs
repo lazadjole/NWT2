@@ -54,69 +54,26 @@ namespace NWT2.Controllers
             return Ok(tipVozila);
         }
 
-        //// PUT: api/TipVozila/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutTipVozila(Guid id, TipVozila tipVozila)
-        //{
-        //    if (id != tipVozila.TipVozilaID)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    _context.Entry(tipVozila).State = EntityState.Modified;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!TipVozilaExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
 
-        //    return NoContent();
-        //}
+        [HttpPost (Name =nameof(PostTipVozilaAsync))]
+        public async Task<ActionResult<TipVozila>> PostTipVozilaAsync(CancellationToken ct, [FromBody] Entities.TipVozila tipBody)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-        //// POST: api/TipVozila
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPost]
-        //public async Task<ActionResult<TipVozila>> PostTipVozila(TipVozila tipVozila)
-        //{
-        //    _context.TipVozila_1.Add(tipVozila);
-        //    await _context.SaveChangesAsync();
+            var resourceID = await _tipVozilaService.CreateTipVozilaAsync(ct,tipBody.vrstaVozila);
 
-        //    return CreatedAtAction("GetTipVozila", new { id = tipVozila.TipVozilaID }, tipVozila);
-        //}
+            return Created(Url.Link(nameof(Controllers.TipVozilaController.GetTipVozilaByIdAsync), new { id = resourceID }), null);
+        }
 
-        //// DELETE: api/TipVozila/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<TipVozila>> DeleteTipVozila(Guid id)
-        //{
-        //    var tipVozila = await _context.TipVozila_1.FindAsync(id);
-        //    if (tipVozila == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpDelete("{id}", Name =(nameof(DeleteTipVozilaAsync)))]
+        public async Task<ActionResult<TipVozila>> DeleteTipVozilaAsync(CancellationToken ct,Guid id)
+        {
+            await _tipVozilaService.DeleteTipVozilaAsync(ct, id);
+            return NoContent();
+        }
 
-        //    _context.TipVozila_1.Remove(tipVozila);
-        //    await _context.SaveChangesAsync();
 
-        //    return tipVozila;
-        //}
-
-        //private bool TipVozilaExists(Guid id)
-        //{
-        //    return _context.TipVozila_1.Any(e => e.TipVozilaID == id);
-        //}
     }
 }

@@ -52,69 +52,27 @@ namespace NWT2.Controllers
             return Ok(pica);
         }
 
-        //// PUT: api/Pica/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutPica(Guid id, Pica pica)
-        //{
-        //    if (id != pica.PicaID)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    _context.Entry(pica).State = EntityState.Modified;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!PicaExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
 
-        //    return NoContent();
-        //}
 
-        //// POST: api/Pica
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPost]
-        //public async Task<ActionResult<Pica>> PostPica(Pica pica)
-        //{
-        //    _context.Pica.Add(pica);
-        //    await _context.SaveChangesAsync();
+        [HttpPost (Name =nameof(PostPicaAsync))]
+        public async Task<ActionResult<Pica>> PostPicaAsync(CancellationToken ct, [FromBody] Entities.Pica picaBody)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-        //    return CreatedAtAction("GetPica", new { id = pica.PicaID }, pica);
-        //}
+            var resourceID = await _ipicaService.CreatePiacaAsync(ct, picaBody.NazivPice,picaBody.Kratak_opis,picaBody.Cena);
 
-        //// DELETE: api/Pica/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Pica>> DeletePica(Guid id)
-        //{
-        //    var pica = await _context.Pica.FindAsync(id);
-        //    if (pica == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return Created(Url.Link(nameof(Controllers.PicaController.GetPicaByIdAsync), new { id = resourceID }), null);
+        }
 
-        //    _context.Pica.Remove(pica);
-        //    await _context.SaveChangesAsync();
+        [HttpDelete("{id}" , Name =(nameof(DeletePicaAsync)))]
+        public async Task<ActionResult<Pica>> DeletePicaAsync(CancellationToken ct,Guid id)
+        {
+            await _ipicaService.DeletePicaAsync(ct, id);
+            return NoContent();
+        }
 
-        //    return pica;
-        //}
 
-        //private bool PicaExists(Guid id)
-        //{
-        //    return _context.Pica.Any(e => e.PicaID == id);
-        //}
     }
 }

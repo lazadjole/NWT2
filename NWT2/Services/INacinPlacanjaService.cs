@@ -14,6 +14,9 @@ namespace NWT2.Services
 
         public Task<IEnumerable< Models.NacinPlacanja>> GetNacinPlacanjaAsync(CancellationToken ct);
 
+        public Task<Guid> CreateNacinPlacanjaAsync(CancellationToken ct, string nazivNacinaPlacanja);
+
+        public Task DeleteNacinPlacanjaAsync(CancellationToken ct, Guid id);
 
     }
 }

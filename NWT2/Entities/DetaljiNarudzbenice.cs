@@ -19,14 +19,14 @@ namespace NWT2.Entities
 
         [NotMapped]
         [Column("ID_pice")]
-        public int FKPicaID { get; set; }
+        public Guid FKPicaID { get; set; }
 
         [Required]
         public Narudzbenica Narudzbenica { get; set; }
 
         [NotMapped]
         [Column("ID_narudzbenica")]
-        public int FKNarudzbenicaID { get; set; }
+        public Guid FKNarudzbenicaID { get; set; }
 
         [Required]
         [Column(TypeName ="tinyint")]

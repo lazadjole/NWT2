@@ -11,5 +11,9 @@ namespace NWT2.Services
         Task<Models.Kupac> GetKupacByIdAsync(Guid id, CancellationToken ct);
         Task<IEnumerable<Models.Kupac>> GetKupaceAsync( CancellationToken ct);
 
+        public Task<Guid> CreateKupacAsync(CancellationToken ct, string ime, string prezime, string telefon, Guid idAdresa);
+
+        public Task DeleteKupacAsync(CancellationToken ct, Guid id);
+
     }
 }

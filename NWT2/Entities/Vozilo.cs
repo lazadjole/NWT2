@@ -19,7 +19,7 @@ namespace NWT2.Entities
 
         [NotMapped]
         [Column("ID_tipaVozila")]
-        public int FKTipVozilaID { get; set; }
+        public Guid FKTipVozilaID { get; set; }
 
         [Required]
         [MaxLength(15)]

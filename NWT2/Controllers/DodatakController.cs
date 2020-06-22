@@ -49,69 +49,28 @@ namespace NWT2.Controllers
 
         }
 
-        //// PUT: api/Dodatak/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutDodatak(Guid id, Dodatak dodatak)
-        //{
-        //    if (id != dodatak.DodatakID)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    _context.Entry(dodatak).State = EntityState.Modified;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!DodatakExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
 
-        //    return NoContent();
-        //}
+        [HttpPost (Name =nameof(PostDodatakAsync))]
+        public async Task<ActionResult<Dodatak>> PostDodatakAsync(CancellationToken ct,[FromBody] Entities.Dodatak dodatak)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-        //// POST: api/Dodatak
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPost]
-        //public async Task<ActionResult<Dodatak>> PostDodatak(Dodatak dodatak)
-        //{
-        //    _context.Dodatak.Add(dodatak);
-        //    await _context.SaveChangesAsync();
+            var resourceID = await _dodatakService.CreateDodatakAsync(ct, dodatak.Naziv_dodatka,dodatak.Cena);
 
-        //    return CreatedAtAction("GetDodatak", new { id = dodatak.DodatakID }, dodatak);
-        //}
+            return Created(Url.Link(nameof(Controllers.DodatakController.GetDodatakByIdAsync), new { id = resourceID }), null);
 
-        //// DELETE: api/Dodatak/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Dodatak>> DeleteDodatak(Guid id)
-        //{
-        //    var dodatak = await _context.Dodatak.FindAsync(id);
-        //    if (dodatak == null)
-        //    {
-        //        return NotFound();
-        //    }
+        }
 
-        //    _context.Dodatak.Remove(dodatak);
-        //    await _context.SaveChangesAsync();
 
-        //    return dodatak;
-        //}
+         [HttpDelete("{id}",Name = nameof(DeleteDodatakAsync))]
+         public async Task<ActionResult<Dodatak>> DeleteDodatakAsync(CancellationToken ct,Guid id)
+            {
+            await _dodatakService.DeleteDodatakAsync(ct, id);
+            return NoContent();
+        }
 
-        //private bool DodatakExists(Guid id)
-        //{
-        //    return _context.Dodatak.Any(e => e.DodatakID == id);
-        //}
-    }
+
+        }
 }

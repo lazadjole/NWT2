@@ -23,27 +23,27 @@ namespace NWT2.Entities
 
         [NotMapped]
         [Column("ID_kupca")]
-        public int FKKupacID { get; set; }
+        public Guid FKKupacID { get; set; }
 
         [Required]
         public Zaposleni Zaposleni { get; set; }
 
         [NotMapped]
         [Column("ID_zaposlenog")]
-        public int FKZaposleniId { get; set; }
+        public Guid FKZaposleniId { get; set; }
 
         [Required]
         public StatusDostave statusDostave { get; set; }
 
         [NotMapped]
         [Column("ID_statusaDostave")]
-        public int FKStatusDostaveID { get; set; }
+        public Guid FKStatusDostaveID { get; set; }
 
         public NacinPlacanja  nacinPlacanja { get; set; }
 
         [NotMapped]
         [Column("ID_nacinPlacanja")]
-        public int FKNacinPlacanjaID { get; set; }
+        public Guid FKNacinPlacanjaID { get; set; }
 
         [Column(TypeName = "date")]
         public DateTime datumPrijema { get; set; }
@@ -53,7 +53,7 @@ namespace NWT2.Entities
 
         [NotMapped]
         [Column("ID_vozila")]
-        public int FKVoziloID { get; set; }
+        public Guid FKVoziloID { get; set; }
 
         public List<DetaljiNarudzbenice> DetaljiNarudzbenices { get; set; }
 

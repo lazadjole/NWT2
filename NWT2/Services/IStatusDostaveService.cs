@@ -10,6 +10,8 @@ namespace NWT2.Services
     {
         public Task<Models.StatusDostave> GetStatusDostavebByIdAsync(Guid id, CancellationToken ct);
         public Task<IEnumerable<Models.StatusDostave>> GetStatusDostaveAsync(CancellationToken ct);
+        public Task<Guid> CreateStatusDostaveAsync(CancellationToken ct, string nazivStatusaDostave);
 
+        public Task DeleteStatusDostaveAsync(CancellationToken ct, Guid id);
     }
 }

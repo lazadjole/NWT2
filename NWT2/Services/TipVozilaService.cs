@@ -19,6 +19,33 @@ namespace NWT2.Services
             _mapper = mapper;
         }
 
+        public async Task<Guid> CreateTipVozilaAsync(CancellationToken ct, string vrstaVozila)
+        {
+            Guid ID = Guid.NewGuid();
+            var newTipVozila = _dbContext.TipVozila.Add(
+                new Entities.TipVozila
+                {
+                   TipVozilaID=ID,
+                   vrstaVozila=vrstaVozila
+                }
+                );
+
+            var created = await _dbContext.SaveChangesAsync(ct);
+
+            if (created < 1) throw new InvalidOperationException("Can't created new resource");
+
+            return ID;
+        }
+
+        public async Task DeleteTipVozilaAsync(CancellationToken ct, Guid id)
+        {
+            var tipVozila = await _dbContext.TipVozila.FirstOrDefaultAsync(x => x.TipVozilaID == id);
+            if (tipVozila == null) return;
+
+            _dbContext.TipVozila.Remove(tipVozila);
+            await _dbContext.SaveChangesAsync(ct);
+        }
+
         public async Task<IEnumerable<TipVozila>> GetTipVozilaAsync(CancellationToken ct)
         {
             var tipVozila = await _dbContext.TipVozila.ToArrayAsync();

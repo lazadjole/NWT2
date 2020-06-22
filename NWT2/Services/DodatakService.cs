@@ -19,6 +19,34 @@ namespace NWT2.Services
             _mapper = mapper;
         }
 
+        public async Task<Guid> CreateDodatakAsync(CancellationToken ct, string nazivDodatka, int cena)
+        {
+            Guid ID = Guid.NewGuid();
+            var newDodatak = _dbContext.Dodaci.Add(
+                new Entities.Dodatak
+                {
+                    DodatakID = ID,
+                    Naziv_dodatka = nazivDodatka,
+                    Cena = cena,
+                }
+                );
+
+            var created = await _dbContext.SaveChangesAsync(ct);
+
+            if (created < 1) throw new InvalidOperationException("Can't created new resource");
+
+            return ID;
+        }
+
+        public async Task DeleteDodatakAsync(CancellationToken ct, Guid id)
+        {
+            var dodatak = await _dbContext.Dodaci.FirstOrDefaultAsync(x => x.DodatakID == id);
+            if (dodatak == null) return;
+
+            _dbContext.Dodaci.Remove(dodatak);
+            await _dbContext.SaveChangesAsync(ct);
+        }
+
         public async Task<IEnumerable<Dodatak>> GetDodaciAsync(CancellationToken ct)
         {
             var dodaci = await _dbContext.Dodaci.ToArrayAsync();

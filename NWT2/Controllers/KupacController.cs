@@ -53,69 +53,29 @@ namespace NWT2.Controllers
             return Ok(kupac);
         }
 
-        //// PUT: api/Kupac/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutKupac(Guid id, Kupac kupac)
-        //{
-        //    if (id != kupac.KupacID)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    _context.Entry(kupac).State = EntityState.Modified;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!KupacExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
 
-        //    return NoContent();
-        //}
 
-        //// POST: api/Kupac
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPost]
-        //public async Task<ActionResult<Kupac>> PostKupac(Kupac kupac)
-        //{
-        //    _context.Kupac.Add(kupac);
-        //    await _context.SaveChangesAsync();
+        [HttpPost (Name =nameof(PostKupacAsync))]
+        public async Task<ActionResult<Kupac>> PostKupacAsync(CancellationToken ct, [FromBody] Entities.Kupac kupacBody)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-        //    return CreatedAtAction("GetKupac", new { id = kupac.KupacID }, kupac);
-        //}
+            var resourceID = await _kupacService.CreateKupacAsync(ct, kupacBody.Ime,kupacBody.Prezime,kupacBody.Telefon,kupacBody.FKAdresaID);
 
-        //// DELETE: api/Kupac/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Kupac>> DeleteKupac(Guid id)
-        //{
-        //    var kupac = await _context.Kupac.FindAsync(id);
-        //    if (kupac == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return Created(Url.Link(nameof(Controllers.KupacController.GetKupacByIdAsync), new { id = resourceID }), null);
+        }
 
-        //    _context.Kupac.Remove(kupac);
-        //    await _context.SaveChangesAsync();
 
-        //    return kupac;
-        //}
 
-        //private bool KupacExists(Guid id)
-        //{
-        //    return _context.Kupac.Any(e => e.KupacID == id);
-        //}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Kupac>> DeleteKupac(CancellationToken ct, Guid id)
+        {
+            await _kupacService.DeleteKupacAsync(ct, id);
+            return NoContent();
+        }
+
+
     }
 }

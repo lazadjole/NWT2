@@ -12,5 +12,9 @@ namespace NWT2.Services
 
         public Task<IEnumerable< Models.EkstraDodaci>> GetEkstraDodaciAsync(CancellationToken ct);
 
+        public Task<Guid> CreateEkstraDodaciAsync(CancellationToken ct, Guid IdDodatak, Guid IdDetaljiNardzbenice);
+
+        public Task DeleteEkstraDodatakAsync(CancellationToken ct, Guid id);
+
     }
 }

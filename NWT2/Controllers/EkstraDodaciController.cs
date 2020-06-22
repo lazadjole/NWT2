@@ -49,22 +49,26 @@ namespace NWT2.Controllers
             return Ok(resource);
         }
 
-        // POST api/<EkstraDodaciController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+
+        [HttpPost(Name = nameof(PostEkstraDodaciAsync))]
+        public async Task<ActionResult<EkstraDodaci>> PostEkstraDodaciAsync(CancellationToken ct, [FromBody] Entities.EkstraDodaci ekstraDodaci)
         {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+
+            var resourceID = await _ekstraDodaciService.CreateEkstraDodaciAsync(ct, ekstraDodaci.FKDodatakID,ekstraDodaci.FKDetaljiNarudzbeniceID);
+
+            return Created(Url.Link(nameof(Controllers.EkstraDodaciController.GetEkstraDodaciByIDAsync), new { id = resourceID }), null);
+
         }
 
-        // PUT api/<EkstraDodaciController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
-        // DELETE api/<EkstraDodaciController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+
+        [HttpDelete("{id}", Name = (nameof(DeleteEkstraDodaci)))]
+        public async Task<IActionResult> DeleteEkstraDodaci(CancellationToken ct, Guid id)
         {
+            await _ekstraDodaciService.DeleteEkstraDodatakAsync(ct, id);
+            return NoContent();
         }
     }
 }

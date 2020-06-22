@@ -56,22 +56,25 @@ namespace NWT2.Controllers
             return Ok(zaposlen);
         }
 
-        // POST api/<ZaposleniController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost(Name = nameof(PostZaposleniAsync))]
+        public async Task<ActionResult<Adresa>> PostZaposleniAsync(CancellationToken ct, [FromBody] Entities.Zaposleni zaposleniBody)
         {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+
+            var resourceID = await _zaposleniService.CreateZaposleniAsync(ct, zaposleniBody.Ime,zaposleniBody.Prezime,zaposleniBody.FKAdresaID,zaposleniBody.BrojTelefona);
+
+            return Created(Url.Link(nameof(Controllers.ZaposleniController.GetZaposlenogByIDAsync), new { id = resourceID }), null);
+
         }
 
-        // PUT api/<ZaposleniController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
-        // DELETE api/<ZaposleniController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+
+        [HttpDelete("{id}", Name = (nameof(DeleteZaposleniAsync)))]
+        public async Task<IActionResult> DeleteZaposleniAsync(CancellationToken ct, Guid id)
         {
+            await _zaposleniService.DeleteZaposleniAsync(ct, id);
+            return NoContent();
         }
     }
 }

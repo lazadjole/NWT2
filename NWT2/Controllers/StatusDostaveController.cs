@@ -51,69 +51,25 @@ namespace NWT2.Controllers
             return Ok(statusDostave);
         }
 
-        //// PUT: api/StatusDostave/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutStatusDostave(Guid id, StatusDostave statusDostave)
-        //{
-        //    if (id != statusDostave.StatusDostaveID)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    _context.Entry(statusDostave).State = EntityState.Modified;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!StatusDostaveExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+        [HttpPost (Name =nameof(PostStatusDostaveAsync))]
+        public async Task<ActionResult<StatusDostave>> PostStatusDostaveAsync(CancellationToken ct, [FromBody] Entities.StatusDostave statusBody)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-        //    return NoContent();
-        //}
+            var resourceID = await _statusDostaveService.CreateStatusDostaveAsync(ct,statusBody.NazivStatusa);
 
-        //// POST: api/StatusDostave
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPost]
-        //public async Task<ActionResult<StatusDostave>> PostStatusDostave(StatusDostave statusDostave)
-        //{
-        //    _context.StatusDostave_1.Add(statusDostave);
-        //    await _context.SaveChangesAsync();
+            return Created(Url.Link(nameof(Controllers.StatusDostaveController.GetStatusDostaveByIdAsync), new { id = resourceID }), null);
+        }
 
-        //    return CreatedAtAction("GetStatusDostave", new { id = statusDostave.StatusDostaveID }, statusDostave);
-        //}
+        [HttpDelete("{id}", Name =nameof(DeleteStatusDostaveAsync))]
+        public async Task<ActionResult<StatusDostave>> DeleteStatusDostaveAsync(CancellationToken ct,Guid id)
+        {
+            await _statusDostaveService.DeleteStatusDostaveAsync(ct, id);
+            return NoContent();
+        }
 
-        //// DELETE: api/StatusDostave/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<StatusDostave>> DeleteStatusDostave(Guid id)
-        //{
-        //    var statusDostave = await _context.StatusDostave_1.FindAsync(id);
-        //    if (statusDostave == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    _context.StatusDostave_1.Remove(statusDostave);
-        //    await _context.SaveChangesAsync();
-
-        //    return statusDostave;
-        //}
-
-        //private bool StatusDostaveExists(Guid id)
-        //{
-        //    return _context.StatusDostave_1.Any(e => e.StatusDostaveID == id);
-        //}
     }
 }

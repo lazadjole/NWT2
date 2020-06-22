@@ -13,5 +13,8 @@ namespace NWT2.Services
 
         public Task<IEnumerable<Models.Zaposlen>> GetZaposleneAsync(CancellationToken ct);
 
+        public Task<Guid> CreateZaposleniAsync(CancellationToken ct, string ime, string prezime, Guid idAdresa, string brTelefona);
+
+        public Task DeleteZaposleniAsync(CancellationToken ct, Guid id);
     }
 }

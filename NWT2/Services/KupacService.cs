@@ -18,6 +18,37 @@ namespace NWT2.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
+
+        public async  Task<Guid> CreateKupacAsync(CancellationToken ct, string ime, string prezime, string telefon, Guid idAdresa)
+        {
+            Guid ID = Guid.NewGuid();
+            var newAdresa = _dbContext.Kupci.Add(
+                new Entities.Kupac
+                {
+                    KupacID = ID,
+                    Ime=ime,
+                    Prezime=prezime,
+                    Telefon=telefon,
+                    FKAdresaID=idAdresa
+                }
+                );
+
+            var created = await _dbContext.SaveChangesAsync(ct);
+
+            if (created < 1) throw new InvalidOperationException("Can't created new resource");
+
+            return ID;
+        }
+
+        public async Task DeleteKupacAsync(CancellationToken ct, Guid id)
+        {
+            var Kupac = await _dbContext.Kupci.FirstOrDefaultAsync(x => x.KupacID == id);
+            if (Kupac == null) return;
+
+            _dbContext.Kupci.Remove(Kupac);
+            await _dbContext.SaveChangesAsync(ct);
+        }
+
         public async Task<Kupac> GetKupacByIdAsync(Guid id, CancellationToken ct)
         {
             var kupac = await _dbContext.Kupci.FirstOrDefaultAsync(x => x.KupacID == id);

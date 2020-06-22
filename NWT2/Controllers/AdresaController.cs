@@ -54,69 +54,28 @@ namespace NWT2.Controllers
             return Ok(adresa);
         }
 
-        //// PUT: api/Adresa/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutAdresa(Guid id, Adresa adresa)
-        //{
-        //    if (id != adresa.AdresaID)
-        //    {
-        //        return BadRequest();
-        //    }
+       
 
-        //    _context.Entry(adresa).State = EntityState.Modified;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!AdresaExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+        [HttpPost (Name =nameof(PostAdresaAsync))]
+        public async Task<ActionResult<Adresa>> PostAdresaAsync(CancellationToken ct, [FromBody] Entities.Adresa adresaBody )
+        {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-        //    return NoContent();
-        //}
+            var resourceID = await _adresaService.CreateAdresaAsync(ct,adresaBody.Ulica,adresaBody.Broj,adresaBody.Grad);
 
-        //// POST: api/Adresa
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
-        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPost]
-        //public async Task<ActionResult<Adresa>> PostAdresa(Adresa adresa)
-        //{
-        //    _context.Adresa.Add(adresa);
-        //    await _context.SaveChangesAsync();
+            return Created(Url.Link(nameof(Controllers.AdresaController.GetAdresaByIDAsync), new {id=resourceID}), null);
 
-        //    return CreatedAtAction("GetAdresa", new { id = adresa.AdresaID }, adresa);
-        //}
+        }
 
-        //// DELETE: api/Adresa/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Adresa>> DeleteAdresa(Guid id)
-        //{
-        //    var adresa = await _context.Adresa.FindAsync(id);
-        //    if (adresa == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    _context.Adresa.Remove(adresa);
-        //    await _context.SaveChangesAsync();
+        [HttpDelete("{id}" , Name =(nameof (DeleteAdresaAsync)))]
+        public async Task<IActionResult> DeleteAdresaAsync(CancellationToken ct,Guid id)
+        {
+            await _adresaService.DeleteAdresaAsync(ct, id);
+            return NoContent();
+        }
 
-        //    return adresa;
-        //}
-
-        //private bool AdresaExists(Guid id)
-        //{
-        //    return _context.Adresa.Any(e => e.AdresaID == id);
-        //}
+       
     }
 }

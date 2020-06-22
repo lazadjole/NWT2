@@ -19,6 +19,37 @@ namespace NWT2.Services
             _mapper = mapper;
         }
 
+        public async Task<Guid> CreateAdresaAsync(CancellationToken ct, string ulica, int broj, string grad)
+        {
+            Guid ID =Guid.NewGuid();
+            var newAdresa = _dbContext.Adrese.Add(
+                new Entities.Adresa
+                {
+                    AdresaID = ID,
+                    Broj = broj,
+                    Grad = grad,
+                    Ulica = ulica
+                }
+                );
+
+            var created = await _dbContext.SaveChangesAsync(ct);
+
+            if (created < 1) throw new InvalidOperationException("Can't created new resource");
+
+            return ID;
+
+        }
+
+        public async Task DeleteAdresaAsync(CancellationToken ct, Guid id)
+        {
+            var adresa = await _dbContext.Adrese.FirstOrDefaultAsync(x => x.AdresaID == id);
+            if (adresa == null) return ;
+
+            _dbContext.Adrese.Remove(adresa);
+            await _dbContext.SaveChangesAsync(ct);
+
+        }
+
         public async Task<Models.Adresa> GetAdresaByIdAsync(Guid id, CancellationToken ct)
         {
             var adresa = await _dbContext.Adrese.FirstOrDefaultAsync(x => x.AdresaID == id);

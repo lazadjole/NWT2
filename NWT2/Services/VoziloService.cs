@@ -49,11 +49,19 @@ namespace NWT2.Services
             await _dbContext.SaveChangesAsync(ct);
         }
 
-        public async Task<IEnumerable<Vozilo>> GetVoziloAsync(CancellationToken ct)
+        public async Task<PagedResults<Vozilo>> GetVoziloAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {    var vozilo = await _dbContext.Vozila.ToArrayAsync();
             if (vozilo == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.Vozilo>, IEnumerable<Models.Vozilo>>(vozilo);
+            var mapVozilo=  _mapper.Map<IEnumerable<Entities.Vozilo>, IEnumerable<Models.Vozilo>>(vozilo);
+
+            var pagedVozilo = mapVozilo.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+
+            return new PagedResults<Vozilo>
+            {
+                Items = pagedVozilo,
+                TotalSize = mapVozilo.Count()
+            };
 
         }
 

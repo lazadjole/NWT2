@@ -61,12 +61,20 @@ namespace NWT2.Services
             return _mapper.Map<Entities.Narudzbenica, Models.Narudzbenica>(narudzbenica);
         }
 
-        public async Task<IEnumerable<Narudzbenica>> GetNarudzbeniceAsync(CancellationToken ct)
+        public async Task<PagedResults<Narudzbenica>> GetNarudzbeniceAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
             var narudzbenice = await _dbContext.Narudzbenica.ToArrayAsync();
             if (narudzbenice == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.Narudzbenica>, IEnumerable<Models.Narudzbenica>>(narudzbenice);
+            var narudzbenicaMap= _mapper.Map<IEnumerable<Entities.Narudzbenica>, IEnumerable<Models.Narudzbenica>>(narudzbenice);
+
+            var narudzbenicaPagin = narudzbenicaMap.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+
+            return new PagedResults<Narudzbenica>
+            {
+                Items = narudzbenicaPagin,
+                TotalSize = narudzbenicaMap.Count()
+            };
         }
     }
 }

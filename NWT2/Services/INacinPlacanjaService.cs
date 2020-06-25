@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NWT2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace NWT2.Services
 
         public Task<Models.NacinPlacanja> GetNacinPlacanjaById(Guid id, CancellationToken ct);
 
-        public Task<IEnumerable< Models.NacinPlacanja>> GetNacinPlacanjaAsync(CancellationToken ct);
+        public Task<PagedResults< Models.NacinPlacanja>> GetNacinPlacanjaAsync(CancellationToken ct, PaginigOptions paginigOptions);
 
         public Task<Guid> CreateNacinPlacanjaAsync(CancellationToken ct, string nazivNacinaPlacanja);
 

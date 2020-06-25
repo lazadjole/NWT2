@@ -59,12 +59,21 @@ namespace NWT2.Services
             return _mapper.Map<Entities.Adresa, Models.Adresa>(adresa);
         }
 
-        public async Task<IEnumerable<Adresa>> GetAdreseAsync(CancellationToken ct)
+        public async Task<PagedResults<Adresa>> GetAdreseAsync(CancellationToken ct,  PaginigOptions paginigOptions)
         {
             var adrese = await _dbContext.Adrese.ToArrayAsync();
             if (adrese == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.Adresa>, IEnumerable< Models.Adresa>>(adrese);
+            var mapAdress = _mapper.Map<IEnumerable<Entities.Adresa>, IEnumerable<Models.Adresa>>(adrese);
+
+            var pagedAdress = mapAdress.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+
+
+            return new PagedResults<Adresa>
+            { 
+                Items= pagedAdress,
+                TotalSize=mapAdress.Count()
+            } ;
 
         }
     }

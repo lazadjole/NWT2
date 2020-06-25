@@ -47,12 +47,20 @@ namespace NWT2.Services
             await _dbContext.SaveChangesAsync(ct);
         }
 
-        public async Task<IEnumerable<Models.NacinPlacanja>> GetNacinPlacanjaAsync(CancellationToken ct)
+        public async Task<PagedResults<Models.NacinPlacanja>> GetNacinPlacanjaAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
             var nacinPlacanja = await _dbContext.NacinPlacanja.ToArrayAsync();
             if (nacinPlacanja == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.NacinPlacanja>, IEnumerable<Models.NacinPlacanja>>(nacinPlacanja);
+            var nacinPlacanjaMap= _mapper.Map<IEnumerable<Entities.NacinPlacanja>, IEnumerable<Models.NacinPlacanja>>(nacinPlacanja);
+
+            var pagedNacinPlacanja = nacinPlacanjaMap.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+
+            return new PagedResults<NacinPlacanja>
+            {
+                Items=pagedNacinPlacanja,
+                TotalSize=nacinPlacanjaMap.Count()
+            };
         }
 
         public async Task<NacinPlacanja> GetNacinPlacanjaById(Guid id, CancellationToken ct)

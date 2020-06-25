@@ -24,17 +24,20 @@ namespace NWT2.Controllers
         }
 
         [HttpGet (Name =nameof(GetTipVozilaAsync))]
-        public async Task<ActionResult<IEnumerable<TipVozila>>> GetTipVozilaAsync(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable<TipVozila>>> GetTipVozilaAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
         {
-            var collection = await _tipVozilaService.GetTipVozilaAsync(ct);
+            var collection = await _tipVozilaService.GetTipVozilaAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetTipVozilaAsync));
 
-            var resources = new Collection<Models.TipVozila>
+            var resources = new PagedCollection<Models.TipVozila>
             {
                 Self = collectionLink,
-                Value = collection.ToArray()
+                Value = collection.Items.ToArray(),
+                Size = collection.TotalSize,
+                Offset = paginigOptions.Offset.Value,
+                Limit = paginigOptions.Limit.Value
             };
 
             return Ok(resources);

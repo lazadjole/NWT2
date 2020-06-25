@@ -24,17 +24,23 @@ namespace NWT2.Controllers
         }
 
         [HttpGet (Name =nameof(GetNacinPlacanjaAsync))]
-        public async Task<ActionResult<IEnumerable<NacinPlacanja>>> GetNacinPlacanjaAsync(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable<NacinPlacanja>>> GetNacinPlacanjaAsync(CancellationToken ct,[FromQuery] PaginigOptions paginigOptions)
         {
-            var collection = await _nacinPlacanjaService.GetNacinPlacanjaAsync(ct);
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+            paginigOptions.Offset = paginigOptions.Offset ?? 0;
+            paginigOptions.Limit = paginigOptions.Limit ?? 25;
+            var collection = await _nacinPlacanjaService.GetNacinPlacanjaAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetNacinPlacanjaAsync));
 
-            var resources = new Collection<Models.NacinPlacanja>
+            var resources = new PagedCollection<Models.NacinPlacanja>
             {
                 Self = collectionLink,
-                Value = collection.ToArray()
+                Value = collection.Items.ToArray(),
+                Limit=paginigOptions.Limit.Value,
+                Offset=paginigOptions.Offset.Value,
+                Size=collection.TotalSize
             };
 
             return Ok(resources);

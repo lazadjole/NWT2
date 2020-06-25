@@ -47,12 +47,21 @@ namespace NWT2.Services
             await _dbContext.SaveChangesAsync(ct);
         }
 
-        public async Task<IEnumerable<EkstraDodaci>> GetEkstraDodaciAsync(CancellationToken ct)
+        public async Task<PagedResults<EkstraDodaci>> GetEkstraDodaciAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
             var ekstraDodaci = await _dbContext.EkstraDodaci.ToArrayAsync();
             if (ekstraDodaci == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.EkstraDodaci>, IEnumerable<Models.EkstraDodaci>>(ekstraDodaci);
+            var ekstraDMapp = _mapper.Map<IEnumerable<Entities.EkstraDodaci>, IEnumerable<Models.EkstraDodaci>>(ekstraDodaci);
+
+            var padgeEkstraDodac = ekstraDMapp.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+
+            return new PagedResults<EkstraDodaci>
+            {
+                Items = ekstraDMapp,
+                TotalSize = ekstraDMapp.Count()
+            };
+
         }
 
         public async Task<EkstraDodaci> GetEkstraDodaciByIdAsync(Guid id, CancellationToken ct)

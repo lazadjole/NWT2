@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NWT2.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -11,7 +12,7 @@ namespace NWT2.Services
 
         public Task<Models.Zaposlen> GetZaposlenByIdAsync(Guid id, CancellationToken ct);
 
-        public Task<IEnumerable<Models.Zaposlen>> GetZaposleneAsync(CancellationToken ct);
+        public Task<PagedResults<Models.Zaposlen>> GetZaposleneAsync(CancellationToken ct, PaginigOptions paginigOptions);
 
         public Task<Guid> CreateZaposleniAsync(CancellationToken ct, string ime, string prezime, Guid idAdresa, string brTelefona);
 

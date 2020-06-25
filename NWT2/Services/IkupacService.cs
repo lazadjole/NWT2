@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using NWT2.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -9,7 +11,7 @@ namespace NWT2.Services
         public interface IkupacService
     {
         Task<Models.Kupac> GetKupacByIdAsync(Guid id, CancellationToken ct);
-        Task<IEnumerable<Models.Kupac>> GetKupaceAsync( CancellationToken ct);
+        Task<PagedResults<Models.Kupac>> GetKupaceAsync( CancellationToken ct, PaginigOptions paginigOptions);
 
         public Task<Guid> CreateKupacAsync(CancellationToken ct, string ime, string prezime, string telefon, Guid idAdresa);
 

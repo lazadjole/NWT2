@@ -57,12 +57,22 @@ namespace NWT2.Services
             return _mapper.Map<Entities.Kupac, Models.Kupac>(kupac);
         }
 
-        public async Task<IEnumerable<Kupac>> GetKupaceAsync(CancellationToken ct)
+        public async Task<PagedResults<Kupac>> GetKupaceAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
             var kupci = await _dbContext.Kupci.ToArrayAsync();
             if (kupci == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.Kupac>, IEnumerable<Models.Kupac>>(kupci);
+            var kupacMap= _mapper.Map<IEnumerable<Entities.Kupac>, IEnumerable<Models.Kupac>>(kupci);
+
+            var padgeKupac = kupacMap.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+
+            return new PagedResults<Kupac>
+            {
+                Items = kupacMap,
+                TotalSize = kupacMap.Count()
+            };
+
+
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NWT2.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,7 +11,7 @@ namespace NWT2.Services
     {
         public Task<Models.DetaljiNarudzbenice> GetDetaljiNarudzbeniceByIdAsync(Guid id, CancellationToken ct);
 
-        public Task<IEnumerable<Models.DetaljiNarudzbenice>> GetDetaljiNarudzbeniceAsync(CancellationToken ct);
+        public Task<PagedResults<Models.DetaljiNarudzbenice>> GetDetaljiNarudzbeniceAsync(CancellationToken ct, PaginigOptions paginigOptions);
 
         public Task<Guid> PostDetaljiNarudzbeniceAsync(CancellationToken ct, Guid picaId, Guid narudzbenicaId, int kolicina);
 

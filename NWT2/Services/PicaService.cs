@@ -57,12 +57,21 @@ namespace NWT2.Services
             return _mapper.Map<Entities.Pica, Models.Pica>(pica);
         }
 
-        public async Task<IEnumerable<Pica>> GetPiceAsync(CancellationToken ct)
+        public async Task<PagedResults<Pica>> GetPiceAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
             var pice = await _dbContext.Pice.ToArrayAsync();
             if (pice == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.Pica>, IEnumerable<Models.Pica>>(pice);
+            var piceMap = _mapper.Map<IEnumerable<Entities.Pica>, IEnumerable<Models.Pica>>(pice);
+
+            var  pagedPice = piceMap.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+
+            return new PagedResults<Pica>
+            {
+                Items = pagedPice,
+                TotalSize = piceMap.Count()
+            };
+
         }
     }
 }

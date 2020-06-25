@@ -32,12 +32,20 @@ namespace NWT2.Services
 
         }
 
-        public async Task<IEnumerable<DetaljiNarudzbenice>> GetDetaljiNarudzbeniceAsync(CancellationToken ct)
+        public async Task<PagedResults<DetaljiNarudzbenice>> GetDetaljiNarudzbeniceAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
             var detaljiNarudzbenica = await _dbContext.DetaljiNarudzbenice.ToArrayAsync();
             if (detaljiNarudzbenica == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.DetaljiNarudzbenice>, IEnumerable<Models.DetaljiNarudzbenice>>(detaljiNarudzbenica);
+           var mapDetaljNarudzbenice= _mapper.Map<IEnumerable<Entities.DetaljiNarudzbenice>, IEnumerable<Models.DetaljiNarudzbenice>>(detaljiNarudzbenica);
+
+
+            var pageDetaljNarudzbenice = mapDetaljNarudzbenice.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+            return new PagedResults<DetaljiNarudzbenice>
+            {
+                Items = pageDetaljNarudzbenice,
+                TotalSize = mapDetaljNarudzbenice.Count()
+            };
         }
 
         public async Task<DetaljiNarudzbenice> GetDetaljiNarudzbeniceByIdAsync(Guid id, CancellationToken ct)

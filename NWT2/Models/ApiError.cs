@@ -21,6 +21,7 @@ namespace NWT2.Models
             Message = message;
         }
 
+     
         
         public ApiError(ModelStateDictionary modelState)
         {

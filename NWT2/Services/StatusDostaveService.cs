@@ -46,12 +46,19 @@ namespace NWT2.Services
             await _dbContext.SaveChangesAsync(ct);
         }
 
-        public async Task<IEnumerable<StatusDostave>> GetStatusDostaveAsync(CancellationToken ct)
+        public async Task<PagedResults<StatusDostave>> GetStatusDostaveAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
             var statusDostave = await _dbContext.StatusDostave.ToArrayAsync();
             if (statusDostave == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.StatusDostave>, IEnumerable<Models.StatusDostave>>(statusDostave);
+            var statusMap= _mapper.Map<IEnumerable<Entities.StatusDostave>, IEnumerable<Models.StatusDostave>>(statusDostave);
+            var statusPadge=statusMap.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+
+            return new PagedResults<StatusDostave>
+            {
+                Items = statusPadge,
+                TotalSize = statusMap.Count()
+            };
 
         }
 

@@ -23,17 +23,20 @@ namespace NWT2.Controllers
         }
 
         [HttpGet (Name =nameof(GetPiceAsync))]
-        public async Task<ActionResult<IEnumerable<Pica>>> GetPiceAsync(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable<Pica>>> GetPiceAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
         {
-            var collection = await _ipicaService.GetPiceAsync(ct);
+            var collection = await _ipicaService.GetPiceAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetPiceAsync));
 
-            var resources = new Collection<Models.Pica>
+            var resources = new PagedCollection<Models.Pica>
             {
                 Self = collectionLink,
-                Value = collection.ToArray()
+                Value = collection.Items.ToArray(),
+                Size = collection.TotalSize,
+                Offset = paginigOptions.Offset.Value,
+                Limit = paginigOptions.Limit.Value
             };
 
             return Ok(resources);

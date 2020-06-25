@@ -22,17 +22,20 @@ namespace NWT2.Controllers
         }
 
         [HttpGet (Name =nameof(GetStatusDostaveAsync))]
-        public async Task<ActionResult<IEnumerable<StatusDostave>>> GetStatusDostaveAsync(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable<StatusDostave>>> GetStatusDostaveAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
         {
-            var collection = await _statusDostaveService.GetStatusDostaveAsync(ct);
+            var collection = await _statusDostaveService.GetStatusDostaveAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetStatusDostaveAsync));
 
-            var resources = new Collection<Models.StatusDostave>
+            var resources = new PagedCollection<Models.StatusDostave>
             {
                 Self = collectionLink,
-                Value = collection.ToArray()
+                Value = collection.Items.ToArray(),
+                Size = collection.TotalSize,
+                Offset = paginigOptions.Offset.Value,
+                Limit = paginigOptions.Limit.Value
             };
 
             return Ok(resources);

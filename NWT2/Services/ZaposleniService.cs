@@ -60,12 +60,20 @@ namespace NWT2.Services
             return _mapper.Map<Entities.Zaposleni, Models.Zaposlen>(zaposlen);
         }
 
-        public async Task<IEnumerable<Zaposlen>> GetZaposleneAsync(CancellationToken ct)
+        public async Task<PagedResults<Zaposlen>> GetZaposleneAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
             var zaposleni = await _dbContext.Zaposleni.ToArrayAsync();
             if (zaposleni == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.Zaposleni>, IEnumerable<Models.Zaposlen>>(zaposleni);
+            var zaposleniMap= _mapper.Map<IEnumerable<Entities.Zaposleni>, IEnumerable<Models.Zaposlen>>(zaposleni);
+
+            var pagedZaposleni= zaposleniMap.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+
+            return new PagedResults<Zaposlen>
+            {
+                Items = pagedZaposleni,
+                TotalSize = zaposleniMap.Count()
+            };
         }
     }
 }

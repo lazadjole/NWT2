@@ -24,17 +24,23 @@ namespace NWT2.Controllers
 
 
         [HttpGet (Name =nameof(GetEkstraDodaciAsync))]
-        public async Task<ActionResult<IEnumerable< Models.EkstraDodaci>>> GetEkstraDodaciAsync(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable< Models.EkstraDodaci>>> GetEkstraDodaciAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
         {
-            var collection = await _ekstraDodaciService.GetEkstraDodaciAsync(ct);
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+            paginigOptions.Offset = paginigOptions.Offset ?? 0;
+            paginigOptions.Limit = paginigOptions.Limit ?? 25;
+            var collection = await _ekstraDodaciService.GetEkstraDodaciAsync(ct,paginigOptions);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetEkstraDodaciAsync));
 
-            var resources = new Collection<Models.EkstraDodaci>
+            var resources = new PagedCollection<Models.EkstraDodaci>
             {
                 Self = collectionLink,
-                Value = collection.ToArray()
+                Value = collection.Items.ToArray(),
+                Limit=paginigOptions.Limit.Value,
+                Offset=paginigOptions.Offset.Value,
+                Size=collection.TotalSize
             };
 
             return Ok(resources);

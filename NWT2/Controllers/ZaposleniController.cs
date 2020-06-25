@@ -25,17 +25,20 @@ namespace NWT2.Controllers
 
        
         [HttpGet(Name = nameof(GetZaposleniAsync))]
-        public async Task<ActionResult<IEnumerable<Zaposlen>>> GetZaposleniAsync(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable<Zaposlen>>> GetZaposleniAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
         {
-            var collection = await _zaposleniService.GetZaposleneAsync(ct);
+            var collection = await _zaposleniService.GetZaposleneAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetZaposleniAsync));
 
-            var resources = new Collection<Models.Zaposlen>
+            var resources = new PagedCollection<Models.Zaposlen>
             {
                 Self = collectionLink,
-                Value = collection.ToArray()
+                Value = collection.Items.ToArray(),
+                Size = collection.TotalSize,
+                Offset = paginigOptions.Offset.Value,
+                Limit = paginigOptions.Limit.Value
             };
 
             return Ok(resources);

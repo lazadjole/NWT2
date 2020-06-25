@@ -24,17 +24,23 @@ namespace NWT2.Controllers
         }
 
         [HttpGet (Name =nameof(GetKupciAsync))]
-        public async Task<ActionResult<IEnumerable<Kupac>>> GetKupciAsync(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable<Kupac>>> GetKupciAsync(CancellationToken ct,[FromQuery] PaginigOptions paginigOptions)
         {
-            var collection = await _kupacService.GetKupaceAsync(ct);
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+            paginigOptions.Offset = paginigOptions.Offset ?? 0;
+            paginigOptions.Limit = paginigOptions.Limit ?? 25;
+            var collection = await _kupacService.GetKupaceAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetKupciAsync));
 
-            var resources = new Collection<Models.Kupac>
+            var resources = new PagedCollection<Models.Kupac>
             {
                 Self = collectionLink,
-                Value = collection.ToArray()
+                Value = collection.Items.ToArray(),
+                Size=collection.TotalSize,
+                Limit=paginigOptions.Limit.Value,
+                Offset=paginigOptions.Offset.Value
             };
 
             return Ok(resources);
@@ -69,8 +75,8 @@ namespace NWT2.Controllers
 
 
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Kupac>> DeleteKupac(CancellationToken ct, Guid id)
+        [HttpDelete("{id}", Name =nameof(DeleteKupacAsync))]
+        public async Task<IActionResult> DeleteKupacAsync(CancellationToken ct, Guid id)
         {
             await _kupacService.DeleteKupacAsync(ct, id);
             return NoContent();

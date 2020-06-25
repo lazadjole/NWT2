@@ -23,17 +23,20 @@ namespace NWT2.Controllers
         }
 
         [HttpGet (Name =nameof(GetVozilaAsync))]
-        public async Task<ActionResult<IEnumerable<Vozilo>>> GetVozilaAsync(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable<Vozilo>>> GetVozilaAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
         {
-            var collection = await _voziloService.GetVoziloAsync(ct);
+            var collection = await _voziloService.GetVoziloAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetVozilaAsync));
 
-            var resources = new Collection<Models.Vozilo>
+            var resources = new PagedCollection<Models.Vozilo>
             {
                 Self = collectionLink,
-                Value = collection.ToArray()
+                Value = collection.Items.ToArray(),
+                Size = collection.TotalSize,
+                Offset = paginigOptions.Offset.Value,
+                Limit = paginigOptions.Limit.Value
             };
 
             return Ok(resources);

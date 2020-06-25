@@ -46,12 +46,23 @@ namespace NWT2.Services
             await _dbContext.SaveChangesAsync(ct);
         }
 
-        public async Task<IEnumerable<TipVozila>> GetTipVozilaAsync(CancellationToken ct)
+        public async Task<PagedResults<TipVozila>> GetTipVozilaAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
             var tipVozila = await _dbContext.TipVozila.ToArrayAsync();
             if (tipVozila == null) return null;
 
-            return _mapper.Map<IEnumerable<Entities.TipVozila>, IEnumerable<Models.TipVozila>>(tipVozila);
+            var mapTipVozila= _mapper.Map<IEnumerable<Entities.TipVozila>, IEnumerable<Models.TipVozila>>(tipVozila);
+
+            var pagedTipVozila = mapTipVozila.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
+
+
+            return new PagedResults<TipVozila>
+            {
+                Items = pagedTipVozila,
+                TotalSize = mapTipVozila.Count()
+            };
+
+
         }
 
         public async Task<TipVozila> GetTipVozilaByIdAsync(Guid id, CancellationToken ct)

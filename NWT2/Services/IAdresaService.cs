@@ -1,4 +1,5 @@
-﻿ using System;
+﻿using NWT2.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -9,7 +10,7 @@ namespace NWT2.Services
     public interface IAdresaService
     {
        public Task<Models.Adresa> GetAdresaByIdAsync(Guid id, CancellationToken ct);
-       public Task<IEnumerable<Models.Adresa>> GetAdreseAsync(CancellationToken ct);
+       public Task<PagedResults<Models.Adresa>> GetAdreseAsync(CancellationToken ct,  PaginigOptions paginigOptions);
 
         public Task<Guid> CreateAdresaAsync(CancellationToken ct, string ulica, int broj, string grad);
 

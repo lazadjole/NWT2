@@ -26,8 +26,8 @@ namespace NWT2.Services
                 new Entities.EkstraDodaci
                 {
                     Ekstra_dodaciID = ID,
-                    FKDetaljiNarudzbeniceID=IdDetaljiNardzbenice,
-                    FKDodatakID=IdDodatak
+                    DetaljiNarudzbeniceID=IdDetaljiNardzbenice,
+                    DodatakID=IdDodatak
                 }
                 );
 

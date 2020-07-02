@@ -24,6 +24,9 @@ namespace NWT2.Controllers
         [HttpGet (Name =nameof(GetStatusDostaveAsync))]
         public async Task<ActionResult<IEnumerable<StatusDostave>>> GetStatusDostaveAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
         {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+            paginigOptions.Offset = paginigOptions.Offset ?? 0;
+            paginigOptions.Limit = paginigOptions.Limit ?? 25;
             var collection = await _statusDostaveService.GetStatusDostaveAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 

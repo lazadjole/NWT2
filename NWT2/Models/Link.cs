@@ -24,7 +24,7 @@ namespace NWT2.Models
                 RouteName = routeName,
                 RouteValues = routeValues,
                 Method = GetMethod,
-                //Relations = new string[] { "Collection" }
+                Relations = new string[] { "Collection" }
             };
         public const string GetMethod = "GET";
 
@@ -39,7 +39,6 @@ namespace NWT2.Models
         public string[] Relations { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
-        [JsonIgnore]
         public string RouteName { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]

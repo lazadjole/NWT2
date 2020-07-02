@@ -28,11 +28,11 @@ namespace NWT2.Services
                     NarudzbenicaID=ID,
                     BrojNarudzbenice=BrojNarudzbenice,
                     datumPrijema=datumPrijema,
-                    FKKupacID=idKupac,
+                    KupacID=idKupac,
                     FKNacinPlacanjaID=idNacinPlacanja,
-                    FKStatusDostaveID=idStatusDostave,
-                    FKVoziloID=idVozilo,
-                    FKZaposleniId=idZaposleni
+                    StatusDostaveID=idStatusDostave,
+                    VoziloID=idVozilo,
+                    ZaposleniId=idZaposleni
                     
                 }
                 );

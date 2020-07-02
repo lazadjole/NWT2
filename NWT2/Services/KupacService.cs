@@ -29,7 +29,7 @@ namespace NWT2.Services
                     Ime=ime,
                     Prezime=prezime,
                     Telefon=telefon,
-                    FKAdresaID=idAdresa
+                    AdresaID=idAdresa
                 }
                 );
 

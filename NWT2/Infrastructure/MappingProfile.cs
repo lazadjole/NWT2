@@ -14,9 +14,10 @@ namespace NWT2.Infrastructure
             CreateMap<Entities.Adresa,Models.Adresa>()
                 .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.AdresaController.GetAdresaByIDAsync), new { id = src.AdresaID })));
             CreateMap<Entities.DetaljiNarudzbenice, Models.DetaljiNarudzbenice>()
+                .ForMember(dest =>dest.PicaID, opt=>opt.MapFrom(src=>src.PicaID))
                 .ForMember(dest => dest.Self, src => src.MapFrom(src => Link.To(nameof(Controllers.DetaljiNarudzbeniceController.GetDetaljiNarudzbeniceByIDasync), new { id = src.DetaljiNarudzbeniceID })));
             CreateMap<Entities.Dodatak, Models.Dodatak>()
-                .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.DodatakController.GetDodaciAsync), new { id = src.DodatakID })));
+                .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.DodatakController.GetDodatakByIdAsync), new { id = src.DodatakID })));
             CreateMap<Entities.EkstraDodaci, Models.EkstraDodaci>()
                 .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.EkstraDodaciController.GetEkstraDodaciByIDAsync), new { id = src.Ekstra_dodaciID }))); 
             CreateMap<Entities.Kupac, Models.Kupac>()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,23 +15,22 @@ namespace NWT2.Entities
         [Column("ID_DetNarudzbenice", TypeName = "uniqueidentifier")]
         public Guid DetaljiNarudzbeniceID { get; set; }
 
-        [Required]
+        
         public Pica Pica { get; set; }
 
-        [NotMapped]
-        [Column("ID_pice")]
-        public Guid FKPicaID { get; set; }
+        [ForeignKey("Pica")]
+        public Guid PicaID { get; set; }
 
-        [Required]
+        
         public Narudzbenica Narudzbenica { get; set; }
 
-        [NotMapped]
-        [Column("ID_narudzbenica")]
-        public Guid FKNarudzbenicaID { get; set; }
+        [ForeignKey("Narudzbenica")]
+        public Guid NarudzbenicaID { get; set; }
 
         [Required]
         [Column(TypeName ="tinyint")]
         public int Kolicina { get; set; }
+
 
         public List<EkstraDodaci> EkstraDodaci { get; set; }
 

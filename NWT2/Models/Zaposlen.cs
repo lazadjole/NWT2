@@ -15,7 +15,7 @@ namespace NWT2.Models
         public String Prezime { get; set; }
 
      
-        public int AdresaID { get; set; }
+        public Guid AdresaID { get; set; }
 
         public string BrojTelefona { get; set; }
     }

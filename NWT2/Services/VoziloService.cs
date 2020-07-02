@@ -29,7 +29,7 @@ namespace NWT2.Services
                     EvidencioniBr=evidencioniBr,
                     MarkaVozila=markaVozila,
                     DetaljiVozila=detaljiVozila,
-                    FKTipVozilaID=tipVozila
+                    TipVozilaID=tipVozila
                 }
                 );
 

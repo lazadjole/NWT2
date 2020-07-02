@@ -68,7 +68,7 @@ namespace NWT2.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-            var resourceID = await _kupacService.CreateKupacAsync(ct, kupacBody.Ime,kupacBody.Prezime,kupacBody.Telefon,kupacBody.FKAdresaID);
+            var resourceID = await _kupacService.CreateKupacAsync(ct, kupacBody.Ime,kupacBody.Prezime,kupacBody.Telefon,kupacBody.AdresaID);
 
             return Created(Url.Link(nameof(Controllers.KupacController.GetKupacByIdAsync), new { id = resourceID }), null);
         }

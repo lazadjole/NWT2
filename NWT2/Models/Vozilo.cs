@@ -9,7 +9,7 @@ namespace NWT2.Models
     {
         public Guid VoziloID { get; set; }
 
-        public int TipVozilaID { get; set; }
+        public Guid TipVozilaID { get; set; }
         public string MarkaVozila { get; set; }
         public string EvidencioniBr { get; set; }
 

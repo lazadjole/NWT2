@@ -61,7 +61,7 @@ namespace NWT2.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-            var resourceID = await _ekstraDodaciService.CreateEkstraDodaciAsync(ct, ekstraDodaci.FKDodatakID,ekstraDodaci.FKDetaljiNarudzbeniceID);
+            var resourceID = await _ekstraDodaciService.CreateEkstraDodaciAsync(ct, ekstraDodaci.DodatakID,ekstraDodaci.DetaljiNarudzbeniceID);
 
             return Created(Url.Link(nameof(Controllers.EkstraDodaciController.GetEkstraDodaciByIDAsync), new { id = resourceID }), null);
 

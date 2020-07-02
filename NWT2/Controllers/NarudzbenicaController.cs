@@ -68,7 +68,7 @@ namespace NWT2.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-            var resourceID = await _narudzbenicaService.CreateNarudzbenicaAsync(ct, narudzbenicaBody.BrojNarudzbenice,narudzbenicaBody.FKKupacID,narudzbenicaBody.FKZaposleniId,narudzbenicaBody.FKNacinPlacanjaID,narudzbenicaBody.FKNacinPlacanjaID,narudzbenicaBody.datumPrijema,narudzbenicaBody.FKVoziloID);
+            var resourceID = await _narudzbenicaService.CreateNarudzbenicaAsync(ct, narudzbenicaBody.BrojNarudzbenice,narudzbenicaBody.KupacID,narudzbenicaBody.ZaposleniId,narudzbenicaBody.FKNacinPlacanjaID,narudzbenicaBody.FKNacinPlacanjaID,narudzbenicaBody.datumPrijema,narudzbenicaBody.VoziloID);
 
             return Created(Url.Link(nameof(Controllers.NarudzbenicaController.GetNarudzbenicaByIdAsync), new { id = resourceID }), null);
         }

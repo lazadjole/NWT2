@@ -18,26 +18,20 @@ namespace NWT2.Entities
         [MaxLength(15)]
         public string BrojNarudzbenice { get; set; }
 
-        [Required]
         public Kupac kupac { get; set; }
 
-        [NotMapped]
-        [Column("ID_kupca")]
-        public Guid FKKupacID { get; set; }
+        [ForeignKey("Kupci")]
+        public Guid KupacID { get; set; }
 
-        [Required]
         public Zaposleni Zaposleni { get; set; }
 
-        [NotMapped]
-        [Column("ID_zaposlenog")]
-        public Guid FKZaposleniId { get; set; }
+        [ForeignKey("Zaposleni")]
+        public Guid ZaposleniId { get; set; }
 
-        [Required]
         public StatusDostave statusDostave { get; set; }
 
-        [NotMapped]
-        [Column("ID_statusaDostave")]
-        public Guid FKStatusDostaveID { get; set; }
+        [ForeignKey("statusiDostave")]
+        public Guid StatusDostaveID { get; set; }
 
         public NacinPlacanja  nacinPlacanja { get; set; }
 
@@ -48,12 +42,10 @@ namespace NWT2.Entities
         [Column(TypeName = "date")]
         public DateTime datumPrijema { get; set; }
 
-        [Required]
         public Vozilo Vozilo { get; set; }
 
-        [NotMapped]
-        [Column("ID_vozila")]
-        public Guid FKVoziloID { get; set; }
+        [ForeignKey("Vozilo")]
+        public Guid VoziloID { get; set; }
 
         public List<DetaljiNarudzbenice> DetaljiNarudzbenices { get; set; }
 

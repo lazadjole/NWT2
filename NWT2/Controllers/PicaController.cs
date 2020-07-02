@@ -25,6 +25,9 @@ namespace NWT2.Controllers
         [HttpGet (Name =nameof(GetPiceAsync))]
         public async Task<ActionResult<IEnumerable<Pica>>> GetPiceAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
         {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+            paginigOptions.Offset = paginigOptions.Offset ?? 0;
+            paginigOptions.Limit = paginigOptions.Limit ?? 25;
             var collection = await _ipicaService.GetPiceAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 

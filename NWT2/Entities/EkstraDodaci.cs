@@ -13,18 +13,19 @@ namespace NWT2.Entities
         [Column("ID_Dodaci", TypeName = "uniqueidentifier")]
         public Guid Ekstra_dodaciID { get; set; }
 
-        [Required]
+      
         public Dodatak Dodatak { get; set; }
 
-        [NotMapped]
-        [Column("ID_Dodatka")]
-        public Guid FKDodatakID { get; set; }
-
         [Required]
+        [ForeignKey("Dodaci")]
+        public Guid DodatakID { get; set; }
+
+        [NotMapped]
+
         public DetaljiNarudzbenice DetaljiNarudzbenice { get; set; }
 
-        [NotMapped]
-        [Column("ID_DetaljiNarudzbenice")]
-        public Guid FKDetaljiNarudzbeniceID { get; set; }
+        [Required]
+        [ForeignKey("DetaljiNarudzbenica")]
+        public Guid DetaljiNarudzbeniceID { get; set; }
     }
 }

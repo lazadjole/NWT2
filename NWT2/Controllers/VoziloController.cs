@@ -25,6 +25,10 @@ namespace NWT2.Controllers
         [HttpGet (Name =nameof(GetVozilaAsync))]
         public async Task<ActionResult<IEnumerable<Vozilo>>> GetVozilaAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
         {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+            paginigOptions.Offset = paginigOptions.Offset ?? 0;
+            paginigOptions.Limit = paginigOptions.Limit ?? 25;
+
             var collection = await _voziloService.GetVoziloAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 
@@ -60,7 +64,7 @@ namespace NWT2.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-            var resourceID = await _voziloService.CreateVoziloAsync(ct, voziloBody.FKTipVozilaID,voziloBody.EvidencioniBr,voziloBody.MarkaVozila,voziloBody.DetaljiVozila);
+            var resourceID = await _voziloService.CreateVoziloAsync(ct, voziloBody.TipVozilaID,voziloBody.EvidencioniBr,voziloBody.MarkaVozila,voziloBody.DetaljiVozila);
 
             return Created(Url.Link(nameof(Controllers.VoziloController.GetVoziloByIdAsync), new { id = resourceID }), null);
 

@@ -22,12 +22,10 @@ namespace NWT2.Entities
         [Required]
         public String Prezime { get; set; }
 
-        [Required]
         public Adresa Adresa { get; set; }
 
-        [NotMapped]
-        [Column("ID_adresa")]
-        public Guid FKAdresaID { get; set; }
+        [ForeignKey("Adrese")]
+        public Guid AdresaID { get; set; }
 
         [MaxLength(15)]
         public string BrojTelefona { get; set; }

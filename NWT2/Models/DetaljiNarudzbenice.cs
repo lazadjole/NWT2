@@ -10,10 +10,10 @@ namespace NWT2.Models
         public Guid DetaljiNarudzbeniceID { get; set; }
 
        
-        public int PicaID { get; set; }
+        public Guid PicaID { get; set; }
 
        
-        public int NarudzbenicaID { get; set; }
+        public Guid NarudzbenicaID { get; set; }
 
      
         public int Kolicina { get; set; }

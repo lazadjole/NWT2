@@ -59,6 +59,7 @@ namespace NWT2.Services
 
         public async  Task<Guid> PostDetaljiNarudzbeniceAsync(CancellationToken ct, Guid picaId, Guid narudzbenicaId, int kolicina)
         {
+            
             Guid ID = Guid.NewGuid();
 
             var newdetaljNarudzbenice =  _dbContext.DetaljiNarudzbenice.Add
@@ -66,8 +67,8 @@ namespace NWT2.Services
                     new Entities.DetaljiNarudzbenice
                     {
                         DetaljiNarudzbeniceID = ID,
-                        FKNarudzbenicaID = narudzbenicaId,
-                        FKPicaID = picaId,
+                        NarudzbenicaID = narudzbenicaId,
+                        PicaID = picaId,
                         Kolicina = kolicina
                     }
                 );

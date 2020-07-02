@@ -51,7 +51,6 @@ namespace NWT2.Controllers
         public async Task<ActionResult<Adresa>> GetAdresaByIDAsync(Guid id,CancellationToken ct)
         {
 
-
             var adresa = await _adresaService.GetAdresaByIdAsync(id, ct);
 
             if (adresa == null)

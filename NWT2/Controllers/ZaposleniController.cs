@@ -27,6 +27,10 @@ namespace NWT2.Controllers
         [HttpGet(Name = nameof(GetZaposleniAsync))]
         public async Task<ActionResult<IEnumerable<Zaposlen>>> GetZaposleniAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
         {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+            paginigOptions.Offset = paginigOptions.Offset ?? 0;
+            paginigOptions.Limit = paginigOptions.Limit ?? 25;
+
             var collection = await _zaposleniService.GetZaposleneAsync(ct, paginigOptions);
             if (collection == null) return NotFound();
 
@@ -62,9 +66,10 @@ namespace NWT2.Controllers
         [HttpPost(Name = nameof(PostZaposleniAsync))]
         public async Task<ActionResult<Adresa>> PostZaposleniAsync(CancellationToken ct, [FromBody] Entities.Zaposleni zaposleniBody)
         {
+             
             if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-            var resourceID = await _zaposleniService.CreateZaposleniAsync(ct, zaposleniBody.Ime,zaposleniBody.Prezime,zaposleniBody.FKAdresaID,zaposleniBody.BrojTelefona);
+            var resourceID = await _zaposleniService.CreateZaposleniAsync(ct, zaposleniBody.Ime,zaposleniBody.Prezime,zaposleniBody.AdresaID,zaposleniBody.BrojTelefona);
 
             return Created(Url.Link(nameof(Controllers.ZaposleniController.GetZaposlenogByIDAsync), new { id = resourceID }), null);
 

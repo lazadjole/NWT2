@@ -343,7 +343,7 @@ namespace NWT2.Migrations
 
             modelBuilder.Entity("NWT2.Entities.EkstraDodaci", b =>
                 {
-                    b.HasOne("NWT2.Entities.DetaljiNarudzbenice", "DetaljiNarudzbenice")
+                    b.HasOne("NWT2.Entities.DetaljiNarudzbenice", null)
                         .WithMany("EkstraDodaci")
                         .HasForeignKey("DetaljiNarudzbeniceID")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -17,9 +17,8 @@ namespace NWT2.Entities
         [Required]
         public TipVozila TipVozila { get; set; }
 
-        [NotMapped]
-        [Column("ID_tipaVozila")]
-        public Guid FKTipVozilaID { get; set; }
+        [ForeignKey("TipoviVozila")]
+        public Guid TipVozilaID { get; set; }
 
         [Required]
         [MaxLength(15)]

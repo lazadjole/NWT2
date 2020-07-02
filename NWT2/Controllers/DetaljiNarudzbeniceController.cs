@@ -62,7 +62,7 @@ namespace NWT2.Controllers
 
             if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-            var resourceID = await _detaljiNarudzbeniceService.PostDetaljiNarudzbeniceAsync(ct, detaljiNarudzbenice.FKPicaID, detaljiNarudzbenice.FKNarudzbenicaID, detaljiNarudzbenice.Kolicina);
+            var resourceID = await _detaljiNarudzbeniceService.PostDetaljiNarudzbeniceAsync(ct, detaljiNarudzbenice.PicaID, detaljiNarudzbenice.NarudzbenicaID, detaljiNarudzbenice.Kolicina);
 
             return Created(Url.Link(nameof(Controllers.DetaljiNarudzbeniceController.GetDetaljiNarudzbeniceByIDasync), new { id = resourceID }), null);
         }

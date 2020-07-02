@@ -9,8 +9,8 @@ namespace NWT2.Models
     {
         public Guid Ekstra_dodaciID { get; set; }
 
-        public int DodatakID { get; set; }
+        public Guid DodatakID { get; set; }
 
-        public int DetaljiNarudzbeniceID { get; set; }
+        public Guid DetaljiNarudzbeniceID { get; set; }
     }
 }

@@ -29,8 +29,8 @@ namespace NWT2.Entities
         [Required]
         public Adresa Adresa { get; set; }
 
-        [NotMapped]
-        public Guid FKAdresaID { get; set; }
+        [ForeignKey("Adrese")]
+        public Guid AdresaID { get; set; }
 
         public List<Narudzbenica> Narudzbenice { get; set; }
     }

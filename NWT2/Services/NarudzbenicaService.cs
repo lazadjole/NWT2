@@ -19,7 +19,7 @@ namespace NWT2.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid> CreateNarudzbenicaAsync(CancellationToken ct, string BrojNarudzbenice, Guid idKupac, Guid idZaposleni, Guid idStatusDostave, Guid idNacinPlacanja, DateTime datumPrijema, Guid idVozilo)
+        public async Task<Guid> CreateNarudzbenicaAsync(CancellationToken ct, string BrojNarudzbenice, Guid idKupac, Guid idZaposleni, Guid idStatusDostave, string nacinPlacanja, DateTime datumPrijema, Guid idVozilo)
         {
             Guid ID = Guid.NewGuid();
             var newNarudzbenica = _dbContext.Narudzbenica.Add(
@@ -29,7 +29,7 @@ namespace NWT2.Services
                     BrojNarudzbenice=BrojNarudzbenice,
                     datumPrijema=datumPrijema,
                     KupacID=idKupac,
-                    FKNacinPlacanjaID=idNacinPlacanja,
+                    NacinPlacanja= nacinPlacanja,
                     StatusDostaveID=idStatusDostave,
                     VoziloID=idVozilo,
                     ZaposleniId=idZaposleni

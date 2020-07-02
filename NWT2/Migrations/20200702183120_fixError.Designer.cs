@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NWT2.Models;
 
 namespace NWT2.Migrations
 {
     [DbContext(typeof(PicerijaDbContext))]
-    partial class PicerijaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200702183120_fixError")]
+    partial class fixError
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,8 +161,7 @@ namespace NWT2.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("NacinPlacanja")
-                        .HasColumnType("nvarchar(18)")
-                        .HasMaxLength(18);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("StatusDostaveID")
                         .HasColumnType("uniqueidentifier");

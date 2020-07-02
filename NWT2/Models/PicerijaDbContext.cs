@@ -27,7 +27,6 @@ namespace NWT2.Models
 
         public DbSet<Entities.Vozilo> Vozila { get; set; }
 
-        public DbSet<Entities.NacinPlacanja> NacinPlacanja { get; set; }
 
         public DbSet<Entities.Narudzbenica> Narudzbenica { get; set; }
 

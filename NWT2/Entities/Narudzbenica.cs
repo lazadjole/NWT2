@@ -33,11 +33,8 @@ namespace NWT2.Entities
         [ForeignKey("statusiDostave")]
         public Guid StatusDostaveID { get; set; }
 
-        public NacinPlacanja  nacinPlacanja { get; set; }
 
-        [NotMapped]
-        [Column("ID_nacinPlacanja")]
-        public Guid FKNacinPlacanjaID { get; set; }
+        public string NacinPlacanja { get; set; }
 
         [Column(TypeName = "date")]
         public DateTime datumPrijema { get; set; }

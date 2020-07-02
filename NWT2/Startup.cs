@@ -52,7 +52,6 @@ namespace NWT2
             services.AddScoped<IEkstraDodaciService, EkstraDodaciService>();
             services.AddScoped<IDodatakService, DodatakService>();
             services.AddScoped<IkupacService, KupacService>();
-            services.AddScoped<INacinPlacanjaService, NacinPlacanjaService>();
             services.AddScoped<INarudzbenicaService, NarudzbenicaService>();
             services.AddScoped<IPicaService, PicaService>();
             services.AddScoped<IStatusDostaveService, StatusDostaveService>();

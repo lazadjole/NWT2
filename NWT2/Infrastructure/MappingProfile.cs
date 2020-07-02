@@ -22,9 +22,7 @@ namespace NWT2.Infrastructure
                 .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.EkstraDodaciController.GetEkstraDodaciByIDAsync), new { id = src.Ekstra_dodaciID }))); 
             CreateMap<Entities.Kupac, Models.Kupac>()
                 .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.KupacController.GetKupacByIdAsync), new { id = src.KupacID }))); 
-            CreateMap<Entities.NacinPlacanja, Models.NacinPlacanja>()
-                 .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.NacinPlacanjaController.GetNacinPlacanjaByIdAsync), new { id = src.NacinPlacanjaID }))); 
-            CreateMap<Entities.Narudzbenica, Models.Narudzbenica>()
+                 CreateMap<Entities.Narudzbenica, Models.Narudzbenica>()
                  .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.NarudzbenicaController.GetNarudzbenicaByIdAsync), new { id = src.NarudzbenicaID })));
             CreateMap<Entities.Pica, Models.Pica>()
                 .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.PicaController.GetPicaByIdAsync), new { id = src.PicaID }))); 

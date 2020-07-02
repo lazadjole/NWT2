@@ -17,7 +17,7 @@ namespace NWT2.Models
 
         public Guid StatusDostaveID { get; set; }
 
-        public Guid NacinPlacanjaID { get; set; }
+        public string NacinPlacanja { get; set; }
 
         public DateTime datumPrijema { get; set; }
 

@@ -21,7 +21,6 @@ namespace NWT2.Controllers
                 Dodaci = Link.To(nameof(DodatakController.GetDodaciAsync)),
                 EkstraDodaci = Link.To(nameof(EkstraDodaciController.GetEkstraDodaciAsync)),
                 Kupci = Link.To(nameof(KupacController.GetKupciAsync)),
-                NacinPlacanja = Link.To(nameof(NacinPlacanjaController.GetNacinPlacanjaAsync)),
                 Narudzbenice = Link.To(nameof(NarudzbenicaController.GetNarudzbeniceAsync)),
                 Pice = Link.To(nameof(PicaController.GetPiceAsync)),
                 StatusDostave = Link.To(nameof(StatusDostaveController.GetStatusDostaveAsync)),

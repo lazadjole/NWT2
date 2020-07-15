@@ -13,11 +13,11 @@ namespace NWT2.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    public class PicaController : ControllerBase
+    public class PiceController : ControllerBase
     {
         private readonly IPicaService _ipicaService;
 
-        public PicaController( IPicaService ipicaService)
+        public PiceController( IPicaService ipicaService)
         {
             _ipicaService = ipicaService;
         }
@@ -69,7 +69,7 @@ namespace NWT2.Controllers
 
             var resourceID = await _ipicaService.CreatePiacaAsync(ct, picaBody.NazivPice,picaBody.Kratak_opis,picaBody.Cena);
 
-            return Created(Url.Link(nameof(Controllers.PicaController.GetPicaByIdAsync), new { id = resourceID }), null);
+            return Created(Url.Link(nameof(Controllers.PiceController.GetPicaByIdAsync), new { id = resourceID }), null);
         }
 
         [HttpDelete("{id}" , Name =(nameof(DeletePicaAsync)))]

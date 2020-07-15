@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NWT2.Migrations;
 using NWT2.Models;
 using System;
 using System.Collections.Generic;
@@ -49,10 +50,19 @@ namespace NWT2.Services
 
         public async Task<PagedResults<EkstraDodaci>> GetEkstraDodaciAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
-            var ekstraDodaci = await _dbContext.EkstraDodaci.ToArrayAsync();
-            if (ekstraDodaci == null) return null;
+            var query = from ekstraDodaciDbo in _dbContext.EkstraDodaci
+                        join dodaciDbo in _dbContext.Dodaci on ekstraDodaciDbo.DodatakID equals dodaciDbo.DodatakID
+                        join detaljiNDbo in _dbContext.DetaljiNarudzbenice on ekstraDodaciDbo.DetaljiNarudzbeniceID equals detaljiNDbo.DetaljiNarudzbeniceID
+                        select new { ekstraDodaci = ekstraDodaciDbo, dodaci = dodaciDbo, DetaljiNarudzbenice = detaljiNDbo };
+            var rezultati = await query.ToArrayAsync();
 
-            var ekstraDMapp = _mapper.Map<IEnumerable<Entities.EkstraDodaci>, IEnumerable<Models.EkstraDodaci>>(ekstraDodaci);
+            if (rezultati == null) return null;
+            List<Entities.EkstraDodaci> ekstraDodaciList = new List<Entities.EkstraDodaci>();
+            foreach (var prom in rezultati)
+            {
+                ekstraDodaciList.Add(prom.ekstraDodaci);
+            }
+            var ekstraDMapp = _mapper.Map<IEnumerable<Entities.EkstraDodaci>, IEnumerable<Models.EkstraDodaci>>(ekstraDodaciList);
 
             var padgeEkstraDodac = ekstraDMapp.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
 
@@ -66,10 +76,15 @@ namespace NWT2.Services
 
         public async Task<EkstraDodaci> GetEkstraDodaciByIdAsync(Guid id, CancellationToken ct)
         {
-            var Edodaci = await _dbContext.EkstraDodaci.FirstOrDefaultAsync(x => x.Ekstra_dodaciID == id);
-            if (Edodaci == null) return null;
+            var query = from ekstraDodaciDbo in _dbContext.EkstraDodaci
+                        join dodaciDbo in _dbContext.Dodaci on ekstraDodaciDbo.DodatakID equals dodaciDbo.DodatakID
+                        join detaljiNDbo in _dbContext.DetaljiNarudzbenice on ekstraDodaciDbo.DetaljiNarudzbeniceID equals detaljiNDbo.DetaljiNarudzbeniceID
+                        where ekstraDodaciDbo.Ekstra_dodaciID == id
+                        select new { ekstraDodaci = ekstraDodaciDbo, dodaci = dodaciDbo, DetaljiNarudzbenice = detaljiNDbo };
+            var rezultat = await query.FirstAsync();
+            if (rezultat == null) return null;
 
-            return _mapper.Map<Entities.EkstraDodaci, Models.EkstraDodaci>(Edodaci);
+            return _mapper.Map<Entities.EkstraDodaci, Models.EkstraDodaci>(rezultat.ekstraDodaci);
         }
     }
 }

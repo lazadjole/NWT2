@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +40,9 @@ namespace NWT2
                 opt.Filters.Add(typeof(JsonExceptionFilters));
                 opt.Filters.Add(typeof(RequireHttpsAttribute));
                 opt.Filters.Add(typeof(LinkRewritingFilter));
+                opt.ReturnHttpNotAcceptable = true;
+                opt.OutputFormatters.Add(new Microsoft.AspNetCore.Mvc.Formatters.XmlDataContractSerializerOutputFormatter());
+                opt.InputFormatters.Add(new Microsoft.AspNetCore.Mvc.Formatters.XmlDataContractSerializerInputFormatter(opt));
             }
          );
 

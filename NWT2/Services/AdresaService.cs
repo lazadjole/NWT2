@@ -59,9 +59,13 @@ namespace NWT2.Services
             return _mapper.Map<Entities.Adresa, Models.Adresa>(adresa);
         }
 
-        public async Task<PagedResults<Adresa>> GetAdreseAsync(CancellationToken ct,  PaginigOptions paginigOptions)
+        public async Task<PagedResults<Adresa>> GetAdreseAsync(CancellationToken ct,  PaginigOptions paginigOptions, string grad)
         {
-            var adrese = await _dbContext.Adrese.ToArrayAsync();
+            
+            var query = queryVariant(grad);
+
+
+            var adrese = await query.ToArrayAsync();
             if (adrese == null) return null;
 
             var mapAdress = _mapper.Map<IEnumerable<Entities.Adresa>, IEnumerable<Models.Adresa>>(adrese);
@@ -75,6 +79,21 @@ namespace NWT2.Services
                 TotalSize=mapAdress.Count()
             } ;
 
+        }
+
+        public IQueryable<Entities.Adresa> queryVariant (string grad)
+        {
+            if (grad != null)
+            {
+                return from adreseDbo in _dbContext.Adrese
+                       where adreseDbo.Grad == grad
+                       select adreseDbo;
+            }
+            else
+            {
+               return from adreseDbo in _dbContext.Adrese
+                      select adreseDbo;
+            }
         }
     }
 }

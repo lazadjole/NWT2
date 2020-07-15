@@ -13,11 +13,11 @@ namespace NWT2.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    public class VoziloController : ControllerBase
+    public class VozilaController : ControllerBase
     {
         private readonly IVoziloService _voziloService;
 
-        public VoziloController(IVoziloService voziloService)
+        public VozilaController(IVoziloService voziloService)
         {
             _voziloService = voziloService;
         }
@@ -66,7 +66,7 @@ namespace NWT2.Controllers
 
             var resourceID = await _voziloService.CreateVoziloAsync(ct, voziloBody.TipVozilaID,voziloBody.EvidencioniBr,voziloBody.MarkaVozila,voziloBody.DetaljiVozila);
 
-            return Created(Url.Link(nameof(Controllers.VoziloController.GetVoziloByIdAsync), new { id = resourceID }), null);
+            return Created(Url.Link(nameof(Controllers.VozilaController.GetVoziloByIdAsync), new { id = resourceID }), null);
 
         }
 

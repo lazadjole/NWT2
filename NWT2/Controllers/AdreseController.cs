@@ -15,22 +15,22 @@ namespace NWT2.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    public class AdresaController : ControllerBase
+    public class AdreseController : ControllerBase
     {
 
         private readonly IAdresaService _adresaService;
     
-        public AdresaController(IAdresaService adresaService)
+        public AdreseController(IAdresaService adresaService)
         {
             _adresaService = adresaService;
         }
 
         [HttpGet (Name =nameof(GetAdresaAsync))]
-        public async Task<ActionResult<IEnumerable<Adresa>>> GetAdresaAsync(CancellationToken ct,[FromQuery] PaginigOptions paginigOptions)
+        public async Task<ActionResult<IEnumerable<Adresa>>> GetAdresaAsync(CancellationToken ct,[FromQuery] PaginigOptions paginigOptions, [FromQuery(Name = "grad")] string grad)
         {   if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
             paginigOptions.Offset = paginigOptions.Offset ?? 0;
             paginigOptions.Limit = paginigOptions.Limit ?? 25;
-            var collection = await _adresaService.GetAdreseAsync(ct, paginigOptions);
+            var collection = await _adresaService.GetAdreseAsync(ct, paginigOptions, grad);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetAdresaAsync));
@@ -71,10 +71,12 @@ namespace NWT2.Controllers
 
             var resourceID = await _adresaService.CreateAdresaAsync(ct,adresaBody.Ulica,adresaBody.Broj,adresaBody.Grad);
 
-            return Created(Url.Link(nameof(Controllers.AdresaController.GetAdresaByIDAsync), new {id=resourceID}), null);
+            return Created(Url.Link(nameof(Controllers.AdreseController.GetAdresaByIDAsync), new {id=resourceID}), null);
 
         }
 
+
+   
 
         [HttpDelete("{id}" , Name =(nameof (DeleteAdresaAsync)))]
         public async Task<IActionResult> DeleteAdresaAsync(CancellationToken ct,Guid id)

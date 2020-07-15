@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,16 +12,21 @@ namespace NWT2.Models
 
         public string BrojNaruDzbenice { get; set; }
 
-        public Guid KupacID { get; set; }
+        public string imeKupca { get; set; }
 
-        public Guid ZaposleniId { get; set; }
 
-        public Guid StatusDostaveID { get; set; }
+        public  string prezimeKupca { get; set; }
+
+        public string imeZaposleng { get; set; }
+
+        public  string prezimeZaposlenog { get; set; }
+
+        public string statusDostave { get; set; }
 
         public string NacinPlacanja { get; set; }
 
         public DateTime datumPrijema { get; set; }
 
-        public Guid VoziloID { get; set; }
+        public string evidencioniBrVozila { get; set; }
     }
 }

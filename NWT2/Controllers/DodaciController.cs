@@ -13,11 +13,11 @@ namespace NWT2.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    public class DodatakController : ControllerBase
+    public class DodaciController : ControllerBase
     {
         private readonly IDodatakService _dodatakService;
 
-        public DodatakController(IDodatakService dodatakService)
+        public DodaciController(IDodatakService dodatakService)
         {
             _dodatakService = dodatakService;
         }
@@ -66,7 +66,7 @@ namespace NWT2.Controllers
 
             var resourceID = await _dodatakService.CreateDodatakAsync(ct, dodatak.Naziv_dodatka,dodatak.Cena);
 
-            return Created(Url.Link(nameof(Controllers.DodatakController.GetDodatakByIdAsync), new { id = resourceID }), null);
+            return Created(Url.Link(nameof(Controllers.DodaciController.GetDodatakByIdAsync), new { id = resourceID }), null);
 
         }
 

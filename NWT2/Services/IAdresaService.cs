@@ -10,7 +10,7 @@ namespace NWT2.Services
     public interface IAdresaService
     {
        public Task<Models.Adresa> GetAdresaByIdAsync(Guid id, CancellationToken ct);
-       public Task<PagedResults<Models.Adresa>> GetAdreseAsync(CancellationToken ct,  PaginigOptions paginigOptions);
+       public Task<PagedResults<Models.Adresa>> GetAdreseAsync(CancellationToken ct,  PaginigOptions paginigOptions, string Grad);
 
         public Task<Guid> CreateAdresaAsync(CancellationToken ct, string ulica, int broj, string grad);
 

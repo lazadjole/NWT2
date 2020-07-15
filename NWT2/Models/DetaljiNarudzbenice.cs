@@ -9,13 +9,10 @@ namespace NWT2.Models
     {
         public Guid DetaljiNarudzbeniceID { get; set; }
 
-       
-        public Guid PicaID { get; set; }
+        public string NazivPice { get; set; }
 
-       
-        public Guid NarudzbenicaID { get; set; }
+        public string BrojNarudzbenice { get; set; }
 
-     
         public int Kolicina { get; set; }
     }
 }

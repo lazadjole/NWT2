@@ -11,7 +11,7 @@ namespace NWT2.Services
     {
         public Task<Models.DetaljiNarudzbenice> GetDetaljiNarudzbeniceByIdAsync(Guid id, CancellationToken ct);
 
-        public Task<PagedResults<Models.DetaljiNarudzbenice>> GetDetaljiNarudzbeniceAsync(CancellationToken ct, PaginigOptions paginigOptions);
+        public Task<PagedResults<Models.DetaljiNarudzbenice>> GetDetaljiNarudzbeniceAsync(CancellationToken ct, PaginigOptions paginigOptions,string nazivPice);
 
         public Task<Guid> PostDetaljiNarudzbeniceAsync(CancellationToken ct, Guid picaId, Guid narudzbenicaId, int kolicina);
 

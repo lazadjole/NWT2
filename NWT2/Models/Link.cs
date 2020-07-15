@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace NWT2.Models
 {
@@ -39,9 +40,11 @@ namespace NWT2.Models
         public string[] Relations { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
+        [XmlIgnore]
         public string RouteName { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
+        [XmlIgnore]
         public object RouteValues { get; set; }
     }
 }

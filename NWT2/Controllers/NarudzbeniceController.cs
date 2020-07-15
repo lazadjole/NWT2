@@ -13,24 +13,24 @@ namespace NWT2.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    public class NarudzbenicaController : ControllerBase
+    public class NarudzbeniceController : ControllerBase
     {
 
         private readonly INarudzbenicaService _narudzbenicaService;
 
-        public NarudzbenicaController( INarudzbenicaService narudzbenicaService)
+        public NarudzbeniceController( INarudzbenicaService narudzbenicaService)
         {
             _narudzbenicaService = narudzbenicaService;
         }
 
         [HttpGet (Name =nameof(GetNarudzbeniceAsync))]
-        public async Task<ActionResult<IEnumerable<Narudzbenica>>> GetNarudzbeniceAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions)
+        public async Task<ActionResult<IEnumerable<Narudzbenica>>> GetNarudzbeniceAsync(CancellationToken ct, [FromQuery] PaginigOptions paginigOptions,[FromQuery] NarudzbenicaOptions narudzbenicaOptions)
         {
             if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
             paginigOptions.Offset = paginigOptions.Offset ?? 0;
             paginigOptions.Limit = paginigOptions.Limit ?? 25;
 
-            var collection = await _narudzbenicaService.GetNarudzbeniceAsync(ct, paginigOptions);
+            var collection = await _narudzbenicaService.GetNarudzbeniceAsync(ct, paginigOptions,narudzbenicaOptions);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetNarudzbeniceAsync));
@@ -70,7 +70,7 @@ namespace NWT2.Controllers
 
             var resourceID = await _narudzbenicaService.CreateNarudzbenicaAsync(ct, narudzbenicaBody.BrojNarudzbenice,narudzbenicaBody.KupacID,narudzbenicaBody.ZaposleniId,narudzbenicaBody.StatusDostaveID,narudzbenicaBody.NacinPlacanja,narudzbenicaBody.datumPrijema,narudzbenicaBody.VoziloID);
 
-            return Created(Url.Link(nameof(Controllers.NarudzbenicaController.GetNarudzbenicaByIdAsync), new { id = resourceID }), null);
+            return Created(Url.Link(nameof(Controllers.NarudzbeniceController.GetNarudzbenicaByIdAsync), new { id = resourceID }), null);
         }
 
 

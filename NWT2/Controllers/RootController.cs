@@ -16,16 +16,16 @@ namespace NWT2.Controllers
             var response = new RootResponse
             {
                 Self = Link.To(nameof(GetRoot)),
-                Adrese = Link.To(nameof(AdresaController.GetAdresaAsync)),
+                Adrese = Link.To(nameof(AdreseController.GetAdresaAsync)),
                 DetaljiNarudzbenica = Link.To(nameof(DetaljiNarudzbeniceController.GetDetaljiNarudzbeniceAsync)),
-                Dodaci = Link.To(nameof(DodatakController.GetDodaciAsync)),
+                Dodaci = Link.To(nameof(DodaciController.GetDodaciAsync)),
                 EkstraDodaci = Link.To(nameof(EkstraDodaciController.GetEkstraDodaciAsync)),
-                Kupci = Link.To(nameof(KupacController.GetKupciAsync)),
-                Narudzbenice = Link.To(nameof(NarudzbenicaController.GetNarudzbeniceAsync)),
-                Pice = Link.To(nameof(PicaController.GetPiceAsync)),
+                Kupci = Link.To(nameof(KupciController.GetKupciAsync)),
+                Narudzbenice = Link.To(nameof(NarudzbeniceController.GetNarudzbeniceAsync)),
+                Pice = Link.To(nameof(PiceController.GetPiceAsync)),
                 StatusDostave = Link.To(nameof(StatusDostaveController.GetStatusDostaveAsync)),
                 TipoviVozila = Link.To(nameof(TipVozilaController.GetTipVozilaAsync)),
-                Vozila = Link.To(nameof(VoziloController.GetVozilaAsync)),
+                Vozila = Link.To(nameof(VozilaController.GetVozilaAsync)),
                 Zaposleni = Link.To(nameof(ZaposleniController.GetZaposleniAsync)),
 
             };

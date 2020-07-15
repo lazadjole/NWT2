@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using NWT2.Models;
 using System;
 using System.Collections.Generic;
@@ -12,8 +14,8 @@ namespace NWT2.Services
     {
         private readonly PicerijaDbContext _dbContext;
         private readonly AutoMapper.IMapper _mapper;
-
-        public DetaljiNarudzbeniceService(PicerijaDbContext dbContext,AutoMapper.IMapper mapper)
+        
+        public DetaljiNarudzbeniceService(PicerijaDbContext dbContext, AutoMapper.IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -21,23 +23,31 @@ namespace NWT2.Services
 
         public async Task DeleteDetaljiNarudzbeniceAsync(CancellationToken ct, Guid id)
         {
-            var detaljNarudzbenice = await _dbContext.DetaljiNarudzbenice.FirstOrDefaultAsync(x => x.DetaljiNarudzbeniceID ==id);
+            var detaljNarudzbenice = await _dbContext.DetaljiNarudzbenice.FirstOrDefaultAsync(x => x.DetaljiNarudzbeniceID == id);
 
             if (detaljNarudzbenice == null) return;
 
-             _dbContext.DetaljiNarudzbenice.Remove(detaljNarudzbenice);
+            _dbContext.DetaljiNarudzbenice.Remove(detaljNarudzbenice);
 
             await _dbContext.SaveChangesAsync(ct);
 
 
         }
 
-        public async Task<PagedResults<DetaljiNarudzbenice>> GetDetaljiNarudzbeniceAsync(CancellationToken ct, PaginigOptions paginigOptions)
+        public async Task<PagedResults<DetaljiNarudzbenice>> GetDetaljiNarudzbeniceAsync(CancellationToken ct, PaginigOptions paginigOptions, string nazivPice)
         {
-            var detaljiNarudzbenica = await _dbContext.DetaljiNarudzbenice.ToArrayAsync();
-            if (detaljiNarudzbenica == null) return null;
 
-           var mapDetaljNarudzbenice= _mapper.Map<IEnumerable<Entities.DetaljiNarudzbenice>, IEnumerable<Models.DetaljiNarudzbenice>>(detaljiNarudzbenica);
+
+            var query = queryForm(null,nazivPice);
+
+            var rezultati = await query.ToArrayAsync();
+            if (rezultati == null) return null;
+            List<Entities.DetaljiNarudzbenice> detaljiNarudzbenicesList = new List<Entities.DetaljiNarudzbenice>();
+            foreach (var prom in rezultati)
+            {
+                detaljiNarudzbenicesList.Add(prom.detaljiNarudzbenice);
+            }
+            var mapDetaljNarudzbenice = _mapper.Map<IEnumerable<Entities.DetaljiNarudzbenice>, IEnumerable<Models.DetaljiNarudzbenice>>(detaljiNarudzbenicesList);
 
 
             var pageDetaljNarudzbenice = mapDetaljNarudzbenice.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
@@ -50,19 +60,22 @@ namespace NWT2.Services
 
         public async Task<DetaljiNarudzbenice> GetDetaljiNarudzbeniceByIdAsync(Guid id, CancellationToken ct)
         {
-            var detaljiNarudzbenice = await _dbContext.DetaljiNarudzbenice.FirstOrDefaultAsync(x=>x.DetaljiNarudzbeniceID==id);
-            if (detaljiNarudzbenice == null) return null;
+            var query = queryForm(id,null);
 
-            return _mapper.Map<Entities.DetaljiNarudzbenice, Models.DetaljiNarudzbenice>(detaljiNarudzbenice);
+            var rezultat = await query.FirstAsync();
+
+            if (rezultat == null) return null;
+
+            return _mapper.Map<Entities.DetaljiNarudzbenice, Models.DetaljiNarudzbenice>(rezultat.detaljiNarudzbenice);
 
         }
 
-        public async  Task<Guid> PostDetaljiNarudzbeniceAsync(CancellationToken ct, Guid picaId, Guid narudzbenicaId, int kolicina)
+        public async Task<Guid> PostDetaljiNarudzbeniceAsync(CancellationToken ct, Guid picaId, Guid narudzbenicaId, int kolicina)
         {
-            
+
             Guid ID = Guid.NewGuid();
 
-            var newdetaljNarudzbenice =  _dbContext.DetaljiNarudzbenice.Add
+            var newdetaljNarudzbenice = _dbContext.DetaljiNarudzbenice.Add
                 (
                     new Entities.DetaljiNarudzbenice
                     {
@@ -72,9 +85,37 @@ namespace NWT2.Services
                         Kolicina = kolicina
                     }
                 );
-            var created= await _dbContext.SaveChangesAsync(ct);
+            var created = await _dbContext.SaveChangesAsync(ct);
             if (created < 1) throw new InvalidOperationException("can't create new detaljiNarudzbenice");
             return ID;
         }
-    }
+
+        public IQueryable<DetaljiNarudzbenicePom> queryForm(Guid? id, string nazivPice)
+    {
+        if (id == null && nazivPice == null)
+        {
+                return from detaljiDb in _dbContext.DetaljiNarudzbenice
+                       join picaDb in _dbContext.Pice on detaljiDb.PicaID equals picaDb.PicaID
+                       join narudzbenicaDb in _dbContext.Narudzbenica on detaljiDb.NarudzbenicaID equals narudzbenicaDb.NarudzbenicaID
+                       select new DetaljiNarudzbenicePom { detaljiNarudzbenice = detaljiDb, pica = picaDb, Narudzbenica = narudzbenicaDb };
+         }
+
+        else if (id!= null && nazivPice == null)
+            { return from detaljiDb in _dbContext.DetaljiNarudzbenice
+                     join picaDb in _dbContext.Pice on detaljiDb.PicaID equals picaDb.PicaID
+                     join narudzbenicaDb in _dbContext.Narudzbenica on detaljiDb.NarudzbenicaID equals narudzbenicaDb.NarudzbenicaID
+                     where detaljiDb.DetaljiNarudzbeniceID == id
+                     select new DetaljiNarudzbenicePom { detaljiNarudzbenice = detaljiDb, pica = picaDb, Narudzbenica = narudzbenicaDb };
+            }
+            else
+            {
+                return from detaljiDb in _dbContext.DetaljiNarudzbenice
+                       join picaDb in _dbContext.Pice on detaljiDb.PicaID equals picaDb.PicaID
+                       join narudzbenicaDb in _dbContext.Narudzbenica on detaljiDb.NarudzbenicaID equals narudzbenicaDb.NarudzbenicaID
+                       where picaDb.NazivPice== nazivPice
+                       select new DetaljiNarudzbenicePom { detaljiNarudzbenice = detaljiDb, pica = picaDb, Narudzbenica = narudzbenicaDb };
+            }
+        }
+
+}
 }

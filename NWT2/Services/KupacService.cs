@@ -51,18 +51,33 @@ namespace NWT2.Services
 
         public async Task<Kupac> GetKupacByIdAsync(Guid id, CancellationToken ct)
         {
-            var kupac = await _dbContext.Kupci.FirstOrDefaultAsync(x => x.KupacID == id);
-            if (kupac == null) return null;
+            var query = from kupacDb in _dbContext.Kupci
+                        join adresaDb in _dbContext.Adrese on kupacDb.AdresaID equals adresaDb.AdresaID
+                        where kupacDb.KupacID ==id
+                        select new { Kupac = kupacDb, Adresa = adresaDb };
 
-            return _mapper.Map<Entities.Kupac, Models.Kupac>(kupac);
+            var rezultat = await query.FirstOrDefaultAsync();
+
+            if (rezultat == null) return null;
+
+            return _mapper.Map<Entities.Kupac, Models.Kupac>(rezultat.Kupac);
         }
 
         public async Task<PagedResults<Kupac>> GetKupaceAsync(CancellationToken ct, PaginigOptions paginigOptions)
         {
-            var kupci = await _dbContext.Kupci.ToArrayAsync();
-            if (kupci == null) return null;
+            var query = from kupacDb in _dbContext.Kupci
+                        join adresaDb in _dbContext.Adrese on kupacDb.AdresaID equals adresaDb.AdresaID
+                        select new { Kupac = kupacDb, Adresa = adresaDb };
 
-            var kupacMap= _mapper.Map<IEnumerable<Entities.Kupac>, IEnumerable<Models.Kupac>>(kupci);
+            var kupci = await query.ToArrayAsync();
+            if (kupci == null) return null;
+            List<Entities.Kupac> kupacList = new List<Entities.Kupac>();
+            foreach (var prom in kupci)
+            {
+                kupacList.Add(prom.Kupac);
+            }
+
+            var kupacMap= _mapper.Map<IEnumerable<Entities.Kupac>, IEnumerable<Models.Kupac>>(kupacList);
 
             var padgeKupac = kupacMap.Skip(paginigOptions.Offset.Value).Take(paginigOptions.Limit.Value);
 

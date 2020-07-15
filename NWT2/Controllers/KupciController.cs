@@ -13,12 +13,12 @@ namespace NWT2.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    public class KupacController : ControllerBase
+    public class KupciController : ControllerBase
     {
 
         private readonly IkupacService _kupacService;
 
-        public KupacController( IkupacService kupacService)
+        public KupciController( IkupacService kupacService)
         {
             _kupacService = kupacService;
         }
@@ -70,7 +70,7 @@ namespace NWT2.Controllers
 
             var resourceID = await _kupacService.CreateKupacAsync(ct, kupacBody.Ime,kupacBody.Prezime,kupacBody.Telefon,kupacBody.AdresaID);
 
-            return Created(Url.Link(nameof(Controllers.KupacController.GetKupacByIdAsync), new { id = resourceID }), null);
+            return Created(Url.Link(nameof(Controllers.KupciController.GetKupacByIdAsync), new { id = resourceID }), null);
         }
 
 

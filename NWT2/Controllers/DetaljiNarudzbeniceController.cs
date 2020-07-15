@@ -23,12 +23,12 @@ namespace NWT2.Controllers
         }
 
        [HttpGet (Name =nameof(GetDetaljiNarudzbeniceAsync))]
-        public async Task<ActionResult<IEnumerable<DetaljiNarudzbenice>>> GetDetaljiNarudzbeniceAsync(CancellationToken ct,[FromQuery] PaginigOptions paginigOptions)
+        public async Task<ActionResult<IEnumerable<DetaljiNarudzbenice>>> GetDetaljiNarudzbeniceAsync(CancellationToken ct,[FromQuery] PaginigOptions paginigOptions, [FromQuery(Name = "nazivpice")] string nazivPice)
         {
             if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
             paginigOptions.Offset = paginigOptions.Offset ?? 0;
             paginigOptions.Limit = paginigOptions.Limit ?? 25;
-            var collection = await _detaljiNarudzbeniceService.GetDetaljiNarudzbeniceAsync(ct, paginigOptions);
+            var collection = await _detaljiNarudzbeniceService.GetDetaljiNarudzbeniceAsync(ct, paginigOptions, nazivPice);
             if (collection == null) return NotFound();
 
             var collectionLink = Link.ToCollection(nameof(GetDetaljiNarudzbeniceAsync));

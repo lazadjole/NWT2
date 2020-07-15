@@ -17,6 +17,8 @@ namespace NWT2.Models
 
         public string Telefon { get; set; }
        
-        public Guid AdresaID { get; set; }
+        public string Grad { get; set; }
+        public string Ulica { get; set; }
+        public int Broj { get; set; }
     }
 }
